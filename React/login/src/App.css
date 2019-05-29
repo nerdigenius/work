@@ -1,0 +1,17 @@
+.loginbox{
+  width: 30%;
+  height: 70%;
+  background: white;
+  top:50%;
+  left: 50%;
+  position: absolute;
+  transform: translate(-50%,-50%)
+}
+.avatar{
+  width: 30%;
+  height:30%;
+  border-radius:100%; 
+  position: relative;
+  top: -15%;
+  left: 35%
+}
