@@ -1,0 +1,37 @@
+{
+  "name": "gpssite-website-node",
+  "version": "1.0.0",
+  "description": "GPS IT Solutions website",
+  "engines": {
+    "node": "11.x",
+    "npm": "6.x"
+  },
+  "scripts": {
+    "start": "node server",
+    "heroku-postbuild": "cd react-ui/ && npm install && npm install --only=dev --no-shrinkwrap && npm run build"
+  },
+  "cacheDirectories": [
+    "node_modules",
+    "react-ui/node_modules"
+  ],
+  "dependencies": {
+    "body-parser": "^1.18.3",
+    "ejs": "^2.6.1",
+    "email-templates": "^5.0.4",
+    "express": "^4.16.4",
+    "heroku-ssl-redirect": "0.0.4",
+    "node-mailjet": "^3.3.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://gitlab.com/unityxgroup/atap2chat.git"
+  },
+  "keywords": [
+    "node",
+    "heroku",
+    "create-react-app",
+    "react"
+  ],
+  "license": "MIT",
+  "devDependencies": {}
+}

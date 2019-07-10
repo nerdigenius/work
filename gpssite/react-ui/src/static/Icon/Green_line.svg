@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="3" height="61" viewBox="0 0 3 61">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: none;
+        stroke: #01c476;
+        stroke-width: 3px;
+      }
+    </style>
+  </defs>
+  <line id="Green_line" class="cls-1" y2="61" transform="translate(1.5)"/>
+</svg>

@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="10.843" height="10.843" viewBox="0 0 10.843 10.843">
+  <defs>
+    <style>
+      .cls-1, .cls-3 {
+        fill: none;
+      }
+
+      .cls-1 {
+        stroke: #fff;
+      }
+
+      .cls-2 {
+        stroke: none;
+      }
+    </style>
+  </defs>
+  <g id="Not_active" class="cls-1">
+    <circle class="cls-2" cx="5.421" cy="5.421" r="5.421"/>
+    <circle class="cls-3" cx="5.421" cy="5.421" r="4.921"/>
+  </g>
+</svg>
