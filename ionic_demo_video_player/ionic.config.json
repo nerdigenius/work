@@ -1,5 +1,7 @@
 {
   "name": "ionic_demo_video_player",
-  "integrations": {},
+  "integrations": {
+    "cordova": {}
+  },
   "type": "angular"
 }

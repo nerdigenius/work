@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { VideoPlayer,VideoOptions } from '@ionic-native/video-player/ngx';
+import { NavController } from '@ionic/angular';
 
 @Component({
   selector: 'app-home',
@@ -6,7 +8,27 @@ import { Component } from '@angular/core';
   styleUrls: ['home.page.scss'],
 })
 export class HomePage {
+  videoOptions:VideoOptions;
+  videoUrl:string;
 
-  constructor() {}
+  constructor(public navCtrl:NavController, private videoPlayer:VideoPlayer) {
+    
+  }
+
+  async playVideo(){
+    try {
+      this.videoOptions={
+        volume:0.7        
+      }
+      this.videoUrl="http://techslides.com/demos/sample-video/small.mp4"
+      this.videoPlayer.play(this.videoUrl,this.videoOptions)
+    } catch (error) {
+
+      console.error(error);
+      
+    }
+  }
+
+
 
 }
