@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
-import { VideoPlayer,VideoOptions } from '@ionic-native/video-player/ngx';
-import { NavController } from '@ionic/angular';
+import { StreamingMedia,StreamingAudioOptions,StreamingVideoOptions } from '@ionic-native/streaming-media/ngx';
 
 @Component({
   selector: 'app-home',
@@ -8,26 +7,30 @@ import { NavController } from '@ionic/angular';
   styleUrls: ['home.page.scss'],
 })
 export class HomePage {
-  videoOptions:VideoOptions;
-  videoUrl:string;
+  
 
-  constructor(public navCtrl:NavController, private videoPlayer:VideoPlayer) {
+  constructor(private streamingMedia:StreamingMedia) {
     
   }
 
-  async playVideo(){
-    try {
-      this.videoOptions={
-        volume:0.7        
-      }
-      this.videoUrl="http://techslides.com/demos/sample-video/small.mp4"
-      this.videoPlayer.play(this.videoUrl,this.videoOptions)
-    } catch (error) {
-
-      console.error(error);
+  startVideo(){
+    let options:StreamingVideoOptions={
+      successCallback:()=>{console.log("sucess")},
+      errorCallback:()=>{console.log("sucess")},
+      orientation:'landscape',
       
     }
+    this.streamingMedia.playVideo("https://amp.dev/static/samples/video/tokyo.mp4",options)
   }
+
+  startAudio(){
+
+  }
+
+  stopAudio(){
+
+  }
+
 
 
 

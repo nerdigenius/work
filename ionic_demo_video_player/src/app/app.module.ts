@@ -8,9 +8,8 @@ import { StatusBar } from '@ionic-native/status-bar/ngx';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
-
-import {VideoPlayer} from '@ionic-native/video-player/ngx'
-
+import { VideoPlayer } from '@ionic-native/video-player/ngx';
+import {StreamingMedia} from '@ionic-native/streaming-media/ngx'
 @NgModule({
   declarations: [AppComponent],
   entryComponents: [],
@@ -19,7 +18,7 @@ import {VideoPlayer} from '@ionic-native/video-player/ngx'
     StatusBar,
     SplashScreen,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
-    VideoPlayer
+    StreamingMedia,VideoPlayer
     
   ],
   bootstrap: [AppComponent]
