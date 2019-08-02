@@ -3,12 +3,12 @@ import styled from 'styled-components';
 import { createGlobalStyle } from 'styled-components';
 
 import Header from '../components/header/Header';
-import Landing from '../components/landing/Landing';
-import WhatWeDo from '../components/whatWeDo/WhatWeDo';
-import Projects from '../components/projects/Projects';
+import Landing from '../components/landing/landing';
+import WhatWeDo from '../components/whatWeDo/whatWeDo';
+import Projects from '../components/projects/projects';
 import Team from '../components/team/Team';
-import Client from '../components/clients/Clients';
-import Contact from '../components/contact/Contact';
+import Client from '../components/clients/clients';
+import Contact from '../components/contact/contact';
 import Footer from '../components/footer/Footer';
 // import WhatWeDo from '../components/whatWeDo/whatWeDo';
 
