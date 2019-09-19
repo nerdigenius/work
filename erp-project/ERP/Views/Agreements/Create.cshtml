@@ -1,0 +1,63 @@
+﻿@model ERP.Models.Agreement
+
+@{
+    ViewBag.Title = "Create";
+}
+
+<div class="card green-top">
+    <h2>Create</h2>
+    <h5>Agreement</h5>
+</div>
+
+<br />
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card blue-top">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.UserMasId, "Vendor / Retailer", htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.DropDownList("UserMasId", null, htmlAttributes: new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.UserMasId, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.AgreementBox, "Detail", htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @*@Html.TextAreaFor(model => model.AgreementBox, new { htmlAttributes = new { cols="20", @class = "form-control" } })*@
+
+
+                            <textarea class="form-control"
+                                      cols="20"
+                                      id="AgreementBox"
+                                      name="AgreementBox"
+                                      rows="2"></textarea>
+                            @Html.ValidationMessageFor(model => model.AgreementBox, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <br />
+
+        <div class="form-group">
+            <div class="col-md-10">
+                <input type="submit" value="Create" class="btn btn-primary" />
+                <button type="button" class="btn btn-danger" onclick="window.location.href='@Url.Action("Index")';">Cancel</button>
+            </div>
+        </div>
+    </div>
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

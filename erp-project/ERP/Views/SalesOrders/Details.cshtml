@@ -1,0 +1,130 @@
+﻿@model ERP.Models.PurchaseOrder
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>PurchaseOrder</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Agreements.AgreementBox)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Agreements.AgreementBox)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Company.Address)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Company.Address)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Item.Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Item.Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Location.Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Location.Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Transport.Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Transport.Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Unit.Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Unit.Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.UserMas.Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.UserMas.Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.PoNo)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.PoNo)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.OrderDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.OrderDate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.DeliveryDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DeliveryDate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.OrderQuantity)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.OrderQuantity)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.UnitPrice)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.UnitPrice)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CarryCost)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CarryCost)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Tax)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Tax)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

@@ -1,0 +1,221 @@
+﻿@model ERP.Models.Commission
+
+@{
+    ViewBag.Title = "Edit";
+}
+
+<style>
+    .pad-between {
+        box-sizing: border-box;
+        padding: 0 15px;
+    }
+</style>
+
+<div class="card green-top">
+    <h2>Edit</h2>
+    <h5>Commission</h5>
+
+</div>
+
+<br />
+@using (Html.BeginForm())
+{
+
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(model => model.Id)
+    <div class="form-horizontal">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card blue-top">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.CompanyId, "Company", htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-sm-10">
+
+                            @Html.DropDownList("CompanyId", null, htmlAttributes: new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.CompanyId, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.UserMasId, "Vendor / Retailer", htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.DropDownList("UserMasId", null, htmlAttributes: new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.UserMasId, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.CommissionDate, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.CommissionDate, new { htmlAttributes = new { @class = "form-control datepicker" } })
+                            @Html.ValidationMessageFor(model => model.CommissionDate, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+        <br />
+
+
+        <div>
+            <div class="col-md-12 card blue-top">
+
+                <div class="pad-between col-md-2 text-center">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Item.ProductCategory.Name, "Product Category", htmlAttributes: new { @class = "control-label" })
+                        @Html.DropDownList("ProductCategoryId", null, htmlAttributes: new { @class = "form-control select2" })
+                        @Html.ValidationMessageFor(model => model.Item.ProductCategoryId, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="pad-between col-md-2 text-center">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.ItemId, "Item", htmlAttributes: new { @class = "control-label" })
+                        @Html.DropDownList("ItemId", null, htmlAttributes: new { @class = "form-control select2" })
+                        @Html.ValidationMessageFor(model => model.ItemId, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="pad-between col-md-1 text-center">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.OrderQuantity, "Order Quantity", htmlAttributes: new { @class = "control-label" })
+                        @Html.EditorFor(model => model.OrderQuantity, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.OrderQuantity, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="pad-between col-md-1 text-center">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.UnitId, "Unit", htmlAttributes: new { @class = "control-label" })
+                        @Html.DropDownList("UnitId", null, "", htmlAttributes: new { @class = "form-control select2" })
+                        @Html.ValidationMessageFor(model => model.UnitId, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+
+
+                <div class="pad-between col-md-1 text-center">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.CommissionPerUnit, "Commission", htmlAttributes: new { @class = "control-label" })
+                        @Html.EditorFor(model => model.CommissionPerUnit, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.CommissionPerUnit, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+
+
+
+
+                <div class="pad-between col-md-1 text-center">
+                    <div class="form-group">
+                        <label>Total Carrying Cost</label>
+                        <input type="text" id="totalCarryingCost" class="form-control" disabled="disabled" />
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="">
+            <div class="">
+                <div class="col-md-10">
+                    <br />
+                    <input type="submit" value="Update" class="btn btn-primary" />
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
+
+<script type="text/javascript">
+
+    $("body").addClass("sidebar-xs");
+
+    var orderID = $("#Id").val();
+    var UserMasId = $("#UserMasId").val();
+
+
+    $(document).ready(function () {
+
+        //  $(".select2").select2();
+        $('.datepicker').datepicker({
+            format: 'dd/mm/yyyy',
+            todayHighlight: true,
+            todayBtn: true,
+            autoclose: true
+        });
+
+        var totalCommission = $("#totalCarryingCost").val(@ViewBag.totalCarryingCost);
+    });
+
+
+
+
+
+    $('#CommissionPerUnit').on('change', function () {
+        //alert("Handler for .change() called.");
+
+        var orderQty = $("#OrderQuantity").val();
+        //alert(orderQty);
+        var carryingCost = $("#CommissionPerUnit").val();
+        //alert(carryingCost);
+
+
+        var totalCarryingCost = 0.00;
+
+        totalCarryingCost = orderQty * carryingCost;
+        //alert(totalCarryingCost);
+
+
+        if (isNaN(totalCarryingCost)) {
+            // $('#ModalPOQuantity_Error').text('Unit Price must be a numeric value!').show();
+
+            $('#CarryCost').val("");
+            $('#totalCarryingCost').val("");
+        }
+        else {
+            //$('#ModalPOQuantity_Error').hide();
+            $('#totalCarryingCost').val(totalCarryingCost);
+        }
+
+
+        // $("#productSubtotal").val(totalCost);
+    });
+
+    $('#OrderQuantity').on('change', function () {
+        //alert("Handler for .change() called.");
+
+        var orderQty = $("#OrderQuantity").val();
+        //alert(orderQty);
+        var carryingCost = $("#CommissionPerUnit").val();
+        //alert(carryingCost);
+
+        var totalCarryingCost = 0.00;
+
+        totalCarryingCost = orderQty * carryingCost;
+        //alert(totalCarryingCost);
+
+
+        if (isNaN(totalCarryingCost)) {
+            // $('#ModalPOQuantity_Error').text('Unit Price must be a numeric value!').show();
+
+            $('#CommissionPerUnit').val("");
+            $('#totalCarryingCost').val("");
+        }
+        else {
+            //$('#ModalPOQuantity_Error').hide();
+            $('#totalCarryingCost').val(totalCarryingCost);
+        }
+
+        // $("#productSubtotal").val(totalCost);
+    });
+
+
+
+</script>

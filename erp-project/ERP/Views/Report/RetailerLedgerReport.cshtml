@@ -1,0 +1,165 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+}
+@*@{
+        ViewBag.Title = "Index";
+    }
+    <p style="padding-left:5px; padding-top:5px;">
+        @Html.ActionLink("Create New", "Create",
+              null, new { @style = "color:#ffffff;", id = "lnkCreate", @class = "btn btn-success" })
+    </p>
+    <div class="panel panel-primary panel-bordered">
+        <div class="panel-heading">
+            <h5 class="panel-title">List Of Banks</h5>
+        </div>
+        <div class="panel-body">
+            <table class="table table-hover table-xs">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Transaction Type</th>
+                        <th>Description</th>
+                        <th>Quantity</th>
+                        <th>Rate</th>
+                        <th>Debit/Credit</th>
+                        <th>Balance @ViewBag.initialBalance</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                    <tr>
+
+
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Date)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.TransactionType)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Description)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Quantity)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Rate)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.DrCr)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Balance)
+                        </td>
+
+
+                    </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+    @section Scripts {
+        <script type="text/javascript" src="~/Scripts/plugins/forms/jquery.dataTables.min.js"></script>
+        <script type="text/javascript" src="~/Scripts/datatables_advanced.js"></script>
+    }*@
+
+
+
+
+<div class="row">
+    <div class="col-md-10">
+        <!-- Basic layout-->
+        <div class="panel panel-flat">
+            <div class="panel-heading">
+                <h5 class="panel-title"><i class="icon-stack-plus position-left"></i> Retailer Ledger Report</h5><hr />
+                <div class="heading-elements">
+                    <ul class="icons-list">
+                        <li><a data-action="collapse"></a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="panel-body">
+                @using (Html.BeginForm("RetailerLedgerReport", "Report", FormMethod.Post, htmlAttributes: new { @target = "_blank" }))
+                {
+                    <div class="form-horizontal">
+                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                        <div class="form-group">
+
+                            <!--New-->
+
+                            <div class="form-group">
+                                @Html.Label("Company", htmlAttributes: new { @class = "control-label col-md-2" })
+                                <div class="col-md-4">
+
+                                    @Html.DropDownList("CompanyId", null, "--Select--", new { @class = "form-control select2", @Id = "ProjectId" })
+
+
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                @Html.Label("Vendor", htmlAttributes: new { @class = "control-label col-md-2" })
+                                <div class="col-md-4">
+                                    @Html.DropDownList("UserMasId", null, "--Select--", new { @class = "form-control select2", @Id = "ProjectId" })
+
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                @Html.Label("FromDate", "Date From", htmlAttributes: new { @class = "control-label col-md-2" })
+                                <div class="col-md-4">
+                                    @Html.TextBox("DateFrom", null, new { @class = "form-control datepicker", @Id = "DateFrom" })
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                @Html.Label("ToDate", "Date To", htmlAttributes: new { @class = "control-label col-md-2" })
+                                <div class="col-md-4">
+                                    @Html.TextBox("DateTo", null, new { @class = "form-control datepicker", @Id = "DateTo" })
+                                </div>
+                            </div>
+
+                        </div>
+
+
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-md-offset-2 col-md-4">
+                            <button type="submit" class="btn btn-primary"><i class="icon-add position-left"></i>  Generate Report</button>
+                        </div>
+                    </div>
+                }
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section scripts
+{
+    @Scripts.Render("~/bundles/jqueryval")
+
+    <script src="~/Plugins/select2/select2.min.js"></script>
+    <script>
+        $(".select2").select2();
+        $(".datepicker").attr("autocomplete", "off");
+        $("form").submit(function (e) {
+            console.log($("#BankId").val())
+            if ($("#CompanyId").val() == null || $("#UserMasId").val() == null || $("#DateFrom") == "" || $("#DateFrom") == null || $("#DateTo") == "" || $("#DateTo") == null) {
+                alert("Field left Empty")
+                e.preventDefault();
+            }
+        })
+    </script>
+
+}
+
+
+

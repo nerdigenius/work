@@ -1,0 +1,534 @@
+﻿@model ERP.Models.SalesOrder
+
+@{
+    ViewBag.Title = "Edit";
+}
+
+<style>
+    .pad-between {
+        box-sizing: border-box;
+        padding: 0 15px;
+    }
+</style>
+
+<div class="card green-top">
+    <h2>Edit</h2>
+    <h5>Sales Order</h5>
+    @{
+        if (Model.Status == 1)
+        {
+            <span id="current-status" class="badge badge-success">Confirmed</span>
+        }
+        else
+        {
+            <span id="current-status" class="badge badge-primary">Pending</span>
+        }
+    }
+</div>
+
+<br />
+@using (Html.BeginForm())
+{
+
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(model => model.Id)
+    <div class="form-horizontal">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card blue-top">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.CompanyId, "Company", htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-sm-10">
+                            @if (Model.Status == 1)
+                            {
+                                @Html.DropDownList("CompanyId", null, htmlAttributes: new { @class = "form-control", @disabled = "disabled" })
+                            }
+                            else
+                            {
+                                @Html.DropDownList("CompanyId", null, htmlAttributes: new { @class = "form-control" })
+                            }
+
+                            @Html.ValidationMessageFor(model => model.CompanyId, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.UserMasId, "Vendor / Retailer", htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @if (Model.Status == 1)
+                            {
+                                @Html.DropDownList("UserMasId", null, htmlAttributes: new { @class = "form-control", @disabled = "disabled" })
+                            }
+                            else
+                            {
+                                @Html.DropDownList("UserMasId", null, htmlAttributes: new { @class = "form-control" })
+                            }
+
+                            @Html.ValidationMessageFor(model => model.UserMasId, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.AgreementsId, "Agreement", htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+
+                            @if (Model.Status == 1)
+                            {
+                                @Html.DropDownList("AgreementsId", null, htmlAttributes: new { @class = "form-control", @disabled = "disabled" })
+                            }
+                            else
+                            {
+                                @Html.DropDownList("AgreementsId", null, htmlAttributes: new { @class = "form-control" })
+                            }
+                            @Html.ValidationMessageFor(model => model.AgreementsId, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.LocationId, "Location", htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @if (Model.Status == 1)
+                            {
+                                @Html.DropDownList("LocationId", null, htmlAttributes: new { @class = "form-control", @disabled = "disabled" })
+                            }
+                            else
+                            {
+                                @Html.DropDownList("LocationId", null, htmlAttributes: new { @class = "form-control" })
+                            }
+
+                            @Html.ValidationMessageFor(model => model.LocationId, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="card blue-top">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.PoNo, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @if (Model.Status == 1)
+                            {
+                                @Html.EditorFor(model => model.PoNo, new { htmlAttributes = new { @class = "form-control", @disabled = "disabled" } })
+                            }
+                            else
+                            {
+                                @Html.EditorFor(model => model.PoNo, new { htmlAttributes = new { @class = "form-control" } })
+                            }
+
+                            @Html.ValidationMessageFor(model => model.PoNo, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.OrderDate, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @if (Model.Status == 1)
+                            {
+                                @Html.EditorFor(model => model.OrderDate, new { htmlAttributes = new { @class = "form-control datepicker", @disabled = "disabled" } })
+                            }
+                            else
+                            {
+                                @Html.EditorFor(model => model.OrderDate, new { htmlAttributes = new { @class = "form-control datepicker" } })
+                            }
+
+                            @Html.ValidationMessageFor(model => model.OrderDate, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.DeliveryDate, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @if (Model.Status == 1)
+                            {
+                                @Html.EditorFor(model => model.DeliveryDate, new { htmlAttributes = new { @class = "form-control datepicker", @disabled = "disabled" } })
+                            }
+                            else
+                            {
+                                @Html.EditorFor(model => model.DeliveryDate, new { htmlAttributes = new { @class = "form-control datepicker" } })
+                            }
+
+                            @Html.ValidationMessageFor(model => model.DeliveryDate, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br />
+        <div class="">
+            <div class="col-md-12 card blue-top">
+
+                <div class="pad-between col-md-2 text-center">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Item.ProductCategory, "Product Category", htmlAttributes: new { @class = "control-label" })
+                        @if (Model.Status == 1)
+                        {
+                            @Html.DropDownList("ProductCategoryId", null, "--Select--", htmlAttributes: new { @class = "form-control", @disabled = "disabled" })
+                        }
+                        else
+                        {
+                            @Html.DropDownList("ProductCategoryId", null, "--Select--", htmlAttributes: new { @class = "form-control" })
+                        }
+
+                        @Html.ValidationMessageFor(model => model.Item.ProductCategoryId, "", new { @class = "text-danger" })
+
+                    </div>
+                </div>
+
+                <div class="pad-between col-md-2 text-center">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.ItemId, "Item", htmlAttributes: new { @class = "control-label" })
+                        @if (Model.Status == 1)
+                        {
+                            @Html.DropDownList("ItemId", null, "--Select--", htmlAttributes: new { @class = "form-control", @disabled = "disabled" })
+                        }
+                        else
+                        {
+                            @Html.DropDownList("ItemId", null, "--Select--", htmlAttributes: new { @class = "form-control" })
+                        }
+
+                        @Html.ValidationMessageFor(model => model.ItemId, "", new { @class = "text-danger" })
+
+                    </div>
+                </div>
+
+                <div class="pad-between col-md-1 text-center">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.OrderQuantity, "Order Quantity", htmlAttributes: new { @class = "control-label" })
+                        @if (Model.Status == 1)
+                        {
+                            @Html.EditorFor(model => model.OrderQuantity, new { htmlAttributes = new { @class = "form-control", @disabled = "disabled" } })
+                        }
+                        else
+                        {
+                            @Html.EditorFor(model => model.OrderQuantity, new { htmlAttributes = new { @class = "form-control" } })
+                        }
+
+                        @Html.ValidationMessageFor(model => model.OrderQuantity, "", new { @class = "text-danger" })
+
+                    </div>
+                </div>
+                <div class="pad-between col-md-1 text-center">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.UnitId, "Unit", htmlAttributes: new { @class = "control-label" })
+                        @if (Model.Status == 1)
+                        {
+                            @Html.DropDownList("UnitId", null, htmlAttributes: new { @class = "form-control", @disabled = "disabled" })
+                        }
+                        else
+                        {
+                            @Html.DropDownList("UnitId", null, htmlAttributes: new { @class = "form-control" })
+                        }
+
+                        @Html.ValidationMessageFor(model => model.UnitId, "", new { @class = "text-danger" })
+
+                    </div>
+                </div>
+                <div class="pad-between col-md-1 text-center">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.UnitPrice, "Unit Price", htmlAttributes: new { @class = "control-label" })
+                        @if (Model.Status == 1)
+                        {
+                            @Html.EditorFor(model => model.UnitPrice, new { htmlAttributes = new { @class = "form-control", @disabled = "disabled" } })
+                        }
+                        else
+                        {
+                            @Html.EditorFor(model => model.UnitPrice, new { htmlAttributes = new { @class = "form-control" } })
+                        }
+
+                        @Html.ValidationMessageFor(model => model.UnitPrice, "", new { @class = "text-danger" })
+
+                    </div>
+                </div>
+                <div class="pad-between col-md-1 text-center">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.TransportId, "Transport", htmlAttributes: new { @class = "control-label" })
+                        @if (Model.Status == 1)
+                        {
+                            @Html.DropDownList("TransportId", null, htmlAttributes: new { @class = "form-control", @disabled = "disabled" })
+                        }
+                        else
+                        {
+                            @Html.DropDownList("TransportId", null, htmlAttributes: new { @class = "form-control" })
+                        }
+
+                        @Html.ValidationMessageFor(model => model.TransportId, "", new { @class = "text-danger" })
+
+                    </div>
+                </div>
+
+                <div class="pad-between col-md-1 text-center">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.CarryCost, "Carrying Cost", htmlAttributes: new { @class = "control-label" })
+                        @if (Model.Status == 1)
+                        {
+                            @Html.EditorFor(model => model.CarryCost, new { htmlAttributes = new { @class = "form-control", @disabled = "disabled" } })
+                        }
+                        else
+                        {
+                            @Html.EditorFor(model => model.CarryCost, new { htmlAttributes = new { @class = "form-control" } })
+                        }
+
+                        @Html.ValidationMessageFor(model => model.CarryCost, "", new { @class = "text-danger" })
+
+                    </div>
+                </div>
+
+                <div class="pad-between col-md-1 text-center">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Tax, "Tax", htmlAttributes: new { @class = "control-label" })
+                        @if (Model.Status == 1)
+                        {
+                            @Html.EditorFor(model => model.Tax, new { htmlAttributes = new { @class = "form-control", @disabled = "disabled" } })
+                        }
+                        else
+                        {
+                            @Html.EditorFor(model => model.Tax, new { htmlAttributes = new { @class = "form-control" } })
+                        }
+
+                        @Html.ValidationMessageFor(model => model.Tax, "", new { @class = "text-danger" })
+
+                    </div>
+
+                    <div class="form-group">
+                        <label>Total Tax</label>
+                    </div>
+                </div>
+
+                <div class="pad-between col-md-1 text-center">
+                    <div class="form-group">
+                        <label>Product Subtotal</label>
+                        <input type="text" value="@ViewBag.productSubtotal" class="form-control" disabled="disabled" />
+
+                    </div>
+
+                    <div class="form-group">
+                        <label id="taxTotal"></label>@ViewBag.taxTotal
+                    </div>
+                </div>
+
+                <div class="pad-between col-md-1 text-center">
+                    <div class="form-group">
+                        <label>Total Carrying Cost</label>
+                        <input type="text" id="totalCarryingCost" value="@ViewBag.totalCarryingCost" class="form-control" disabled="disabled" />
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="">
+            <div class="">
+                <div class="col-md-10">
+                    <br />
+                    <input type="submit" value="Update" class="btn btn-primary" />
+                    @{
+                        if (ViewBag.status == 0)
+                        {
+                            <input type="button" value="Confirm Order" id="confirm_order" class="btn btn-success" />
+                        }
+                        else
+                        {
+                            <input type="button" value="Order Confirmed" id="confirm_order" class="btn btn-success" disabled/>
+                        }
+                    }
+
+                    <button type="button" class="btn btn-danger" onclick="window.location.href='@Url.Action("Index")';">Cancel</button>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+}
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
+
+<script type="text/javascript">
+
+    $("body").addClass("sidebar-xs");
+
+    var companyID = $("#CompanyId").val();
+    var SelecteditemID = $("#ItemId").val();
+    var quantity = $("#OrderQuantity").val();
+    var orderID = $("#Id").val();
+    var UserMasId = $("#UserMasId").val();
+
+    $("#confirm_order").click(function () {
+        sendConfirmRequest();
+        $("#confirm_order").prop("disabled", true);
+    });
+
+    function sendConfirmRequest() {
+        $.ajax({
+            type: "POST",
+            url: "/SalesOrders/confirmOrder/",
+            data: { companyID: companyID, SelecteditemID: SelecteditemID, quantity: quantity, orderID: orderID,  UserMasId: UserMasId},
+            datatype: "json",
+            traditional: true,
+            success: function (result) {
+
+                if (result == 1) {
+                    alert("Sales Order Confirmed");
+                    $("#current-status").removeClass();
+                    $("#current-status").addClass("badge badge-success");
+                    $("#current-status").html("Confirmed");
+                } else {
+                    alert("Unable Complete Request");
+                }
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                alert('Error: ' + textStatus + ' - ' + errorThrown);
+                $("#confirm_order").prop("disabled", false);
+            }
+        });
+    }
+
+    $(document).ready(function () {
+
+        //  $(".select2").select2();
+        $('.datepicker').datepicker({
+            format: 'dd/mm/yyyy',
+            todayHighlight: true,
+            todayBtn: true,
+            autoclose: true
+        });
+    });
+
+    $('#UnitPrice').on('change', function () {
+        //alert("Handler for .change() called.");
+
+        var orderQty = $("#OrderQuantity").val();
+        //alert(orderQty);
+        var unitPrice = $(this).val();
+        //alert(unitPrice);
+        var totalPrice = 0.00;
+
+        totalPrice = orderQty * unitPrice;
+
+
+        if (isNaN(totalPrice)) {
+            // $('#ModalPOQuantity_Error').text('Unit Price must be a numeric value!').show();
+            $('#OrderQuantity').val("");
+            $('#UnitPrice').val("");
+            $('#productSubtotal').val("");
+        }
+        else {
+            //$('#ModalPOQuantity_Error').hide();
+            $('#productSubtotal').val(totalPrice);
+        }
+
+        //$("#productSubtotal").val(totalPrice);
+    });
+
+    $('#OrderQuantity').on('change', function () {
+        //alert("Handler for .change() called.");
+
+        var orderQty = $(this).val();
+        //alert(orderQty);
+        var unitPrice = $("#UnitPrice").val();
+        //alert(unitPrice);
+        var totalPrice = 0.00;
+
+        totalPrice = orderQty * unitPrice;
+
+
+        if (isNaN(totalPrice)) {
+            // $('#ModalPOQuantity_Error').text('Unit Price must be a numeric value!').show();
+            $('#OrderQuantity').val("");
+            $('#UnitPrice').val("");
+            $('#productSubtotal').val("");
+        }
+        else {
+            //$('#ModalPOQuantity_Error').hide();
+            $('#productSubtotal').val(totalPrice);
+        }
+
+
+        // $("#productSubtotal").val(totalCost);
+    });
+
+    $('#Tax').on('change', function () {
+
+        var orderQty = $("#OrderQuantity").val();
+        var unitPrice = $("#UnitPrice").val();
+        var totalPrice = 0.00;
+        var taxTotalPrice = 0.00;
+        totalPrice = orderQty * unitPrice;
+
+        var tax = $(this).val();
+        taxTotalPrice = (tax / 100.00) * totalPrice;
+
+        if (isNaN(taxTotalPrice)) {
+            // $('#ModalPOQuantity_Error').text('Unit Price must be a numeric value!').show();
+            $('#taxTotal').val("");
+
+        }
+        else {
+            //$('#ModalPOQuantity_Error').hide();
+            $('#taxTotal').text(taxTotalPrice);
+        }
+
+    });
+
+    $('#CarryCost').on('change', function () {
+        //alert("Handler for .change() called.");
+
+        var orderQty = $("#OrderQuantity").val();
+        //alert(orderQty);
+        var carryingCost = $("#CarryCost").val();
+        //alert(carryingCost);
+
+
+        var totalCarryingCost = 0.00;
+
+        totalCarryingCost = orderQty * carryingCost;
+        //alert(totalCarryingCost);
+
+
+        if (isNaN(totalCarryingCost)) {
+            // $('#ModalPOQuantity_Error').text('Unit Price must be a numeric value!').show();
+
+            $('#CarryCost').val("");
+            $('#totalCarryingCost').val("");
+        }
+        else {
+            //$('#ModalPOQuantity_Error').hide();
+            $('#totalCarryingCost').val(totalCarryingCost);
+        }
+
+
+        // $("#productSubtotal").val(totalCost);
+    });
+
+    $('#OrderQuantity').on('change', function () {
+        //alert("Handler for .change() called.");
+
+        var orderQty = $("#OrderQuantity").val();
+        //alert(orderQty);
+        var carryingCost = $("#CarryCost").val();
+        //alert(carryingCost);
+
+        var totalCarryingCost = 0.00;
+
+        totalCarryingCost = orderQty * carryingCost;
+        //alert(totalCarryingCost);
+
+
+        if (isNaN(totalCarryingCost)) {
+            // $('#ModalPOQuantity_Error').text('Unit Price must be a numeric value!').show();
+
+            $('#CarryCost').val("");
+            $('#totalCarryingCost').val("");
+        }
+        else {
+            //$('#ModalPOQuantity_Error').hide();
+            $('#totalCarryingCost').val(totalCarryingCost);
+        }
+
+        // $("#productSubtotal").val(totalCost);
+    });
+
+
+
+</script>

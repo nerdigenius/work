@@ -1,0 +1,477 @@
+﻿@model ERP.Models.Payment
+
+@{
+    ViewBag.Title = "Create";
+}
+
+    <div class="card green-top">
+        <h2>Create</h2>
+        <h5>Payment</h5>
+
+        @{
+            if (Model.Status == 1)
+            {
+                <span id="current-status" class="badge badge-success">Confirmed</span>
+            }
+            else
+            {
+                <span id="current-status" class="badge badge-primary">Pending</span>
+            }
+        }
+    </div>
+
+<br />
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(model => model.Id)
+
+    <div class="form-horizontal">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card blue-top">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.CompanyId, "Company", htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-sm-10">
+                            @Html.DropDownList("CompanyId", null, htmlAttributes: new { @class = "form-control", @disabled = true })
+                            @Html.ValidationMessageFor(model => model.CompanyId, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.UserMasId, "Vendor / Retailer", htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.DropDownList("UserMasId", null, htmlAttributes: new { @class = "form-control", @disabled = true })
+                            @Html.ValidationMessageFor(model => model.UserMasId, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label col-md-2" for="T-mode">Mode Of Transaction</label>
+                        <div class="col-md-10">
+                            <select class="form-control" id="TransactionModeId" name="TransactionModeId" disabled>
+                                <option value="0" @(ViewBag.isCheck == 0 ? "selected" : "")>Online</option>
+                                <option value="1" @(ViewBag.isCheck == 1 ? "selected" : "")>Check</option>
+                                <option value="2" @(ViewBag.isCheck == 2 ? "selected" : "")>Cash</option>
+                                <option value="3" @(ViewBag.isCheck == 3 ? "selected" : "")>Bank Guarantee</option>
+                                @*<option value="4">Company Credit</option>*@
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.CompanyBankId, "Company Bank", htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.DropDownList("CompanyBankId", null, htmlAttributes: new { @class = "form-control", @disabled = true })
+                            @Html.ValidationMessageFor(model => model.CompanyBankId, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.CompanyAccountNo, "Account Name", htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.DropDownList("CompanyAccountNo", null, htmlAttributes: new { @class = "form-control", @disabled = true })
+                            @Html.ValidationMessageFor(model => model.CompanyAccountNo, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    @*<div class="form-group">
+                            @Html.LabelFor(model => model.CompanyAccountNo, "Account No", htmlAttributes: new { @class = "control-label col-md-2" })
+                            <div class="col-md-10">
+                                <select name="CompanyAccountNo" id="CompanyAccountNo" class="form-control">
+                                    <option value="">-Select-</option>
+                                </select>
+                            </div>
+                        </div>*@
+                </div>
+            </div>
+            @*test*@
+            <div class="col-md-6">
+                <div class="card blue-top">
+                    <div class="form-group">
+                        <label class="control-label col-md-2" for="T-mode">Type</label>
+                        <div class="col-md-10">
+                            <select class="form-control" name="modeOfTransection" disabled id="modeOfTransection">
+                                <option value="0">Purchase</option>
+                                <option value="1">Collection</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Amount, "Amount", htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-sm-10">
+                            <div>
+                                @Html.EditorFor(model => model.Amount, new { htmlAttributes = new { @class = "form-control", @disabled = true } })
+                                @Html.ValidationMessageFor(model => model.Amount, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br />
+        <div class="row" id="withdraw">
+            <div class="col-md-6">
+                <div class="card blue-top">
+                    <div class="card-header">
+                        Deposit To
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.VendorBankId, "Vendor Bank", htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.DropDownList("VendorBankId", null, htmlAttributes: new { @class = "form-control", @disabled = true })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.VendorAccountNo, "Vendor Bank", htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.DropDownList("VendorAccountNo", null, htmlAttributes: new { @class = "form-control", @disabled = true })
+                        </div>
+                    </div>
+
+                    @*<div class="form-group">
+                            @Html.LabelFor(model => model.VendorAccountNo, "Account No", htmlAttributes: new { @class = "control-label col-md-2" })
+                            <div class="col-md-10">
+                                <select name="VendorAccountNo" id="VendorAccountNo" class="form-control">
+                                    <option value="">-Select-</option>
+                                </select>
+                            </div>
+                        </div>*@
+                </div>
+            </div>
+
+            <div class="col-md-6" id="checkfields">
+                <div class="card blue-top">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.CheckNo, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.CheckNo, new { htmlAttributes = new { @class = "form-control", @disabled = true } })
+                            @Html.ValidationMessageFor(model => model.CheckNo, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.CheckIssueDate, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.CheckIssueDate, new { htmlAttributes = new { @class = "form-control datepicker", @disabled = true } })
+                            @Html.ValidationMessageFor(model => model.CheckIssueDate, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.CheckPassingDate, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.CheckPassingDate, new { htmlAttributes = new { @class = "form-control datepicker", @disabled = true } })
+                            @Html.ValidationMessageFor(model => model.CheckPassingDate, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br />
+        <br />
+        <div class="form-group">
+            <div class="col-md-10">
+                <input type="submit" value="Update" class="btn btn-primary" disabled />
+                @{
+                    if (ViewBag.status == 0 && ViewBag.isCheck == 1)
+                    {
+                        <input type="button" value="Confirm Order" id="confirm_order" class="btn btn-success" />
+                    }
+                    else
+                    {
+                        <input type="button" value="Order Confirmed" id="confirm_order" class="btn btn-success" disabled />
+                    }
+                }
+                <button type="button" class="btn btn-danger" onclick="window.location.href='@Url.Action("Index")';">Cancel</button>
+            </div>
+        </div>
+    </div>
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
+
+<script type="text/javascript">
+    var transectionID = $("#Id").val();
+    $(document).ready(function () {
+        
+        $("#withdraw").hide();
+        $("#checkfields").hide();
+
+        updateFields($("#TransactionModeId").val());
+
+        //$(".select2").select2();
+        $('.datepicker').datepicker({
+            format: 'dd/mm/yyyy',
+            todayHighlight: true,
+            todayBtn: true,
+            autoclose: true
+        });
+
+        //var selectedCompany = getSelectedCompany();
+        //setBankList(selectedCompany);
+
+        $("#VendorBankId").prepend("<option value=''>--Select--</option>");
+        $("#VendorAccountNo").prepend("<option value=''>--Select--</option>");
+
+        //updateFields($('#TransactionModeId').val());
+
+    });
+
+    $("#confirm_order").click(function () {
+        sendConfirmRequest();
+        $("#confirm_order").prop("disabled", true);
+    });
+
+    function sendConfirmRequest() {
+        $.ajax({
+            type: "POST",
+            url: "/Payments/confirmTransection/",
+            data: { transectionID: transectionID },
+            datatype: "json",
+            traditional: true,
+            success: function (result) {
+                console.log(result);
+                if (result == 1) {
+                    alert("Transection Confirmed");
+                    console.log($("#current-status"));
+                    $("#current-status").removeClass();
+                    $("#current-status").addClass("badge badge-success");
+                    $("#current-status").html("Confirmed");
+                } else {
+                    alert("Unable Complete Request");
+                }
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                alert('Error: ' + textStatus + ' - ' + errorThrown);
+                $("#confirm_order").prop("disabled", false);
+            }
+        });
+    }
+
+    $('#TransactionModeId').on('change', function () {
+
+        var currentSelected = this.value;
+        updateFields(currentSelected);
+
+    });
+
+    $('#modeOfTransection').on('change', function () {
+        if (this.value == 1) {
+            $("#withdraw").hide();
+        }
+        updateFields($('#TransactionModeId').val());
+    });
+
+    function updateFields(val) {
+        
+        if (val == 0 || val == 3) {
+            if ($("#modeOfTransection").val() == 0) {
+                $("#withdraw").show();
+            }
+
+            $("#checkfields").hide();
+        }
+
+        if (val == 1) {
+            
+            if ($("#modeOfTransection").val == 0) {
+                $("#withdraw").show();
+            }
+            $("#checkfields").show();
+            $("#withdraw").show();
+        }
+
+        if (val == 2) {
+            $("#withdraw").hide();
+            $("#checkfields").hide();
+        }
+    }
+
+    $("#CompanyId").on("change", function () {
+        //var selectedCompanyID = getSelectedCompany();
+        setBankList(this.value);
+    })
+
+    $("#CompanyBankId").on("change", function () {
+        //var selectedBankID = getSelectedBank();
+        setAccountField(this.value);
+    })
+
+    $('#modeOfTransection').on('change', function () {
+        if (this.value == 1) {
+            $("#withdraw").hide();
+            $('#VendorBankId option[value=""]').attr("selected", true);
+            $('#VendorAccountNo option[value=""]').attr("selected", true);
+        }
+        updateFields($('#TransactionModeId').val());
+    });
+
+    function getSelectedBank() {
+        var selectedBank = $('#CompanyBankId :selected').val();
+        return selectedBank;
+    }
+
+    function getSelectedCompany() {
+        var selectedCompany = $('#CompanyId :selected').val();
+        return selectedCompany;
+    }
+
+    function setAccountField(selectedBankID) {
+        $.ajax({
+            type: "GET",
+            url: "/Payments/getAccountList?Id=" + selectedBankID,
+            datatype: "json",
+            //traditional: true,
+            success: function (accountList) {
+                //console.log(accountList);
+                $("#CompanyAccountNo").empty();
+                $.each(accountList, function (index, item) {
+                    $("#CompanyAccountNo").append($('<option></option>').val(item.Id).text(item.AccountName + " (" + item.AccountNo + ")"));
+                })
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                alert('Error: ' + textStatus + ' - ' + errorThrown);
+            }
+        });
+    }
+
+    function setBankList(selectedCompanyID) {
+        $.ajax({
+            type: "GET",
+            url: "/Payments/getBankListByCompanyID?Id=" + selectedCompanyID,
+            datatype: "json",
+            success: function (bankList) {
+
+                if (!bankList.length <= 0) {
+
+                    $("#CompanyBankId").empty();
+                    $.each(bankList, function (index, item) {
+                        $("#CompanyBankId").append($('<option></option>').val(item.Id).text(item.Name));
+                    })
+
+                    var selectedBankID = $("#CompanyBankId").val();
+                    if (selectedBankID != null && selectedBankID !== undefined) {
+                        setAccountField(selectedBankID);
+                    } else {
+                        $("#CompanyAccountNo").empty();
+                        $("#CompanyAccountNo").append($('<option></option>').val(0).text("No Bank Selected"));
+                    }
+                } else {
+                    $("#CompanyBankId").empty();
+                    $("#CompanyBankId").append($('<option></option>').val(0).text("No Bank Found"));
+
+                    $("#CompanyAccountNo").empty();
+                    $("#CompanyAccountNo").append($('<option></option>').val(0).text("No Bank Selected"));
+                }
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                alert('Error: ' + textStatus + ' - ' + errorThrown);
+            }
+        });
+    }
+
+    //////////////////////VENDOR BANK ///////////////////////
+
+    $("#UserMasId").on("change", function () {
+        //var selectedCompanyID = getSelectedCompany();
+        setVendorRetBankList(this.value);
+    })
+
+    $("#VendorBankId").on("change", function () {
+        //var selectedBankID = getSelectedBank();
+        if (this.value != "") {
+            setVendorRetAccountField(this.value);
+        }
+    })
+
+    function getSelectedVendorRet() {
+        var selected = $('#UserMasId :selected').val();
+        return selected;
+    }
+
+    function setVendorRetAccountField(selectedBankID) {
+
+        $.ajax({
+            type: "GET",
+            url: "/Payments/getVendorRetAccountList?Id=" + selectedBankID,
+            datatype: "json",
+            //traditional: true,
+            success: function (accountList) {
+                //console.log(accountList);
+                $("#VendorAccountNo").empty();
+                $("#VendorAccountNo").append($('<option></option>').val("").text("-- Select --"));
+                $.each(accountList, function (index, item) {
+                    $("#VendorAccountNo").append($('<option></option>').val(item.Id).text(item.AccountName + " (" + item.AccountNo + ")"));
+                })
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                alert('Error: ' + textStatus + ' - ' + errorThrown);
+            }
+        });
+    }
+
+    function setVendorRetBankList(selectedVendorRet) {
+        $.ajax({
+            type: "GET",
+            url: "/Payments/getVendorBankListByVendorID?Id=" + selectedVendorRet,
+            datatype: "json",
+            success: function (bankList) {
+                //console.log(bankList);
+                if (!bankList.length <= 0) {
+
+                    $("#VendorBankId").empty();
+                    $("#VendorBankId").append($('<option></option>').val("").text("-- Select --"));
+                    $.each(bankList, function (index, item) {
+                        $("#VendorBankId").append($('<option></option>').val(item.Id).text(item.Name));
+                    })
+
+                    var selectedBankID = $("#VendorBankId").val();
+                    if (selectedBankID != null && selectedBankID !== undefined && selectedBankID != "") {
+                        setVendorRetAccountField(selectedBankID);
+                    } else {
+                        $("#VendorAccountNo").empty();
+                        $("#VendorAccountNo").append($('<option></option>').val(0).text("No Bank Selected"));
+                    }
+                } else {
+                    $("#VendorBankId").empty();
+                    $("#VendorBankId").append($('<option></option>').val(0).text("No Bank Found"));
+
+                    $("#VendorAccountNo").empty();
+                    $("#VendorAccountNo").append($('<option></option>').val(0).text("No Bank Selected"));
+                }
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                alert('Error: ' + textStatus + ' - ' + errorThrown);
+            }
+        });
+    }
+
+    $("form").submit(function (e) {
+        //e.preventDefault();
+        var type = $('#modeOfTransection').val();
+        var mode = $('#TransactionModeId').val();
+        //if ($('#modeOfTransection').val() == 1 || ($('#modeOfTransection').val() == 0 && $('#modeOfTransection').val() == 2)) {
+
+        //}
+
+        if ($('#withdraw').css('display') == 'none') {
+
+        } else {
+            if ($("#VendorBankId").val() == "") {
+                alert("Please Select Vendor or Retailer Bank");
+                e.preventDefault();
+            }
+
+            if ($("#VendorAccountNo").val() == "") {
+                alert("Please Select Vendor or Retailer Bank Account");
+                e.preventDefault();
+            }
+        }
+
+    });
+
+</script>

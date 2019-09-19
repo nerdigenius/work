@@ -1,0 +1,310 @@
+﻿@model ERP.Models.BankTransfer
+
+@{
+    ViewBag.Title = "Create";
+}
+
+<div class="card green-top">
+    <h2>Create</h2>
+    <h5>Bank Transfer</h5>
+</div>
+<br />
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+
+    <div class="form-horizontal">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card blue-top">
+                    <div class="card-header">
+                        Transfer From
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.FromCompanyId, "Company", htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-sm-10">
+                            @Html.DropDownList("FromCompanyId", null, htmlAttributes: new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.FromCompanyId, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.FromCompanyBankId, "Bank", htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.DropDownList("FromCompanyBankId", null, htmlAttributes: new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.FromCompanyBankId, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.FromBankAccount, "Account No", htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.DropDownList("FromBankAccount", null, htmlAttributes: new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.FromBankAccount, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.amount, "Amount", htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.amount, new { htmlAttributes = new { @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.amount, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="card blue-top">
+                    <div class="card-header">
+                        Transfer To
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.ToCompanyId, "Company", htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-sm-10">
+                            @Html.DropDownList("ToCompanyId", null, htmlAttributes: new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.ToCompanyId, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.ToCompanyBankId, "Bank", htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.DropDownList("ToCompanyBankId", null, htmlAttributes: new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.ToCompanyBankId, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.ToBankAccount, "Account No", htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.DropDownList("ToBankAccount", null, htmlAttributes: new { @class = "form-control" })
+                            @Html.ValidationMessageFor(model => model.ToBankAccount, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    @*<div class="form-group">
+            @Html.LabelFor(model => model.ToBankAccount, "Account No", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <select name="ToBankAccount" id="ToBankAccount" class="form-control">
+                    <option value="">-Select-</option>
+                </select>
+            </div>
+        </div>*@
+                </div>
+            </div>
+        </div>
+        <br />
+        <div class="form-group">
+            <div class="col-md-10">
+                <input type="submit" value="Update" class="btn btn-primary" />
+                <button type="button" class="btn btn-danger" onclick="window.location.href='@Url.Action("Index")';">Cancel</button>
+            </div>
+        </div>
+    </div>
+}
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
+
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        //var selectedCompany = getSelectedCompany();
+        //setBankList(selectedCompany);
+
+        //var selectedToCompany = getSelectedToCompany();
+        //setBankToList(selectedToCompany);
+    });
+
+    $("#FromCompanyId").on("change", function () {
+        //var selectedCompanyID = getSelectedCompany();
+        setBankList(this.value);
+    })
+
+    $("#FromCompanyBankId").on("change", function () {
+        //var selectedBankID = getSelectedBank();
+        setAccountField(this.value);
+    })
+
+    function getSelectedCompany() {
+        var selectedCompany = $('#FromCompanyId :selected').val();
+        return selectedCompany;
+    }
+
+    function getSelectedBank() {
+        var selectedBank = $('#FromCompanyBankId :selected').val();
+        return selectedBank;
+    }
+
+    function setAccountField(selectedBankID) {
+        $.ajax({
+            type: "GET",
+            url: "/Payments/getAccountList?Id=" + selectedBankID,
+            datatype: "json",
+            success: function (accountList) {
+                $("#FromBankAccount").empty();
+                $.each(accountList, function (index, item) {
+                    $("#FromBankAccount").append($('<option></option>').val(item.AccountNo).text(item.AccountName + " (" + item.AccountNo + ")"));
+                })
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                alert('Error: ' + textStatus + ' - ' + errorThrown);
+            }
+        });
+    }
+
+    function setBankList(selectedCompanyID) {
+        $.ajax({
+            type: "GET",
+            url: "/Payments/getBankListByCompanyID?Id=" + selectedCompanyID,
+            datatype: "json",
+            success: function (bankList) {
+
+                if (!bankList.length <= 0) {
+
+                    $("#FromCompanyBankId").empty();
+                    $.each(bankList, function (index, item) {
+                        $("#FromCompanyBankId").append($('<option></option>').val(item.Id).text(item.Name));
+                    })
+
+                    var selectedBankID = $("#FromCompanyBankId").val();
+                    if (selectedBankID != null && selectedBankID !== undefined) {
+                        setAccountField(selectedBankID);
+                    } else {
+                        $("#FromBankAccount").empty();
+                        $("#FromBankAccount").append($('<option></option>').val("").text("No Bank Selected"));
+                    }
+                } else {
+                    $("#FromCompanyBankId").empty();
+                    $("#FromCompanyBankId").append($('<option></option>').val("").text("No Bank Found"));
+
+                    $("#FromBankAccount").empty();
+                    $("#FromBankAccount").append($('<option></option>').val("").text("No Bank Selected"));
+                }
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                alert('Error: ' + textStatus + ' - ' + errorThrown);
+            }
+        });
+    }
+
+
+
+    ////////////////////BANK TO////////////////////////
+
+
+    $("#ToCompanyId").on("change", function () {
+        //var selectedCompanyID = getSelectedCompany();
+        setBankToList(this.value);
+    })
+
+    $("#ToCompanyBankId").on("change", function () {
+        //var selectedBankID = getSelectedBank();
+        setAccountToField(this.value);
+    })
+
+    function getSelectedToCompany() {
+        var selectedCompany = $('#ToCompanyId :selected').val();
+        return selectedCompany;
+    }
+
+    function getSelectedToBank() {
+        var selectedBank = $('#ToCompanyBankId :selected').val();
+        return selectedBank;
+    }
+
+    function setAccountToField(selectedBankID) {
+        $.ajax({
+            type: "GET",
+            url: "/Payments/getAccountList?Id=" + selectedBankID,
+            datatype: "json",
+            success: function (accountList) {
+                $("#ToBankAccount").empty();
+                $.each(accountList, function (index, item) {
+                    $("#ToBankAccount").append($('<option></option>').val(item.AccountNo).text(item.AccountName + " (" + item.AccountNo + ")"));
+                })
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                alert('Error: ' + textStatus + ' - ' + errorThrown);
+            }
+        });
+    }
+
+    function setBankToList(selectedCompanyID) {
+        $.ajax({
+            type: "GET",
+            url: "/Payments/getBankListByCompanyID?Id=" + selectedCompanyID,
+            datatype: "json",
+            success: function (bankList) {
+
+                if (!bankList.length <= 0) {
+
+                    $("#ToCompanyBankId").empty();
+                    $.each(bankList, function (index, item) {
+                        $("#ToCompanyBankId").append($('<option></option>').val(item.Id).text(item.Name));
+                    })
+
+                    var selectedBankID = $("#ToCompanyBankId").val();
+                    if (selectedBankID != null && selectedBankID !== undefined) {
+                        setAccountToField(selectedBankID);
+                    } else {
+                        $("#ToBankAccount").empty();
+                        $("#ToBankAccount").append($('<option></option>').val("").text("No Bank Selected"));
+                    }
+                } else {
+                    $("#ToCompanyBankId").empty();
+                    $("#ToCompanyBankId").append($('<option></option>').val("").text("No Bank Found"));
+
+                    $("#ToBankAccount").empty();
+                    $("#ToBankAccount").append($('<option></option>').val("").text("No Bank Selected"));
+                }
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                alert('Error: ' + textStatus + ' - ' + errorThrown);
+            }
+        });
+    }
+
+    $("form").submit(function (e) {
+
+        if ($("#FromCompanyId").val() == "") {
+            alert("Please select a company");
+            e.preventDefault();
+        }
+
+        if ($("#FromCompanyBankId").val() == "") {
+            alert("Please select a from bank");
+            e.preventDefault();
+        }
+
+        if ($("#FromBankAccount").val() == "") {
+            alert("Please select a from bank account");
+            e.preventDefault();
+        }
+
+        if ($("#Amount").val() == "") {
+            alert("Please input an amount to transfer");
+            e.preventDefault();
+        }
+
+        if ($("#ToCompanyId").val() == "") {
+            alert("Please select a to company");
+            e.preventDefault();
+        }
+
+        if ($("#ToCompanyBankId").val() == "") {
+            alert("Please select a to from bank");
+            e.preventDefault();
+        }
+
+        if ($("#ToBankAccount").val() == "") {
+            alert("Please select a to bank account");
+            e.preventDefault();
+        }
+    });
+</script>

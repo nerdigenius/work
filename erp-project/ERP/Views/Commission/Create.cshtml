@@ -1,0 +1,414 @@
+﻿@model ERP.Models.Commission
+
+
+@{
+    ViewBag.Title = "Create";
+}
+
+<div class="card green-top">
+    <h2>Create</h2>
+    <h5>Commission</h5>
+</div>
+
+<style>
+    .pad-between {
+        box-sizing: border-box;
+        padding: 0 15px;
+    }
+</style>
+
+
+<br />
+@using (Html.BeginForm())
+{
+
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card blue-top">
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.CompanyId, "Company", htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-sm-10">
+                            @Html.DropDownList("CompanyId", null, htmlAttributes: new { @class = "form-control select2" })
+                            @Html.ValidationMessageFor(model => model.CompanyId, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.UserMasId, "Vendor", htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.DropDownList("UserMasId", null, htmlAttributes: new { @class = "form-control select2" })
+                            @Html.ValidationMessageFor(model => model.UserMasId, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                   
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.CommissionDate, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => model.CommissionDate, new { htmlAttributes = new { @class = "form-control datepicker" } })
+                            @Html.ValidationMessageFor(model => model.CommissionDate, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+           
+        </div>
+        <br />
+        <div>
+            <div class="col-md-12 card blue-top">
+
+                <div class="pad-between col-md-2 text-center">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.Item.ProductCategory.Name, "Product Category", htmlAttributes: new { @class = "control-label" })
+                        @Html.DropDownList("ProductCategoryId", null, htmlAttributes: new { @class = "form-control select2" })
+                        @Html.ValidationMessageFor(model => model.Item.ProductCategoryId, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="pad-between col-md-2 text-center">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.ItemId, "Item", htmlAttributes: new { @class = "control-label" })
+                        @Html.DropDownList("ItemId", null, htmlAttributes: new { @class = "form-control select2" })
+                        @Html.ValidationMessageFor(model => model.ItemId, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="pad-between col-md-1 text-center">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.OrderQuantity, "Order Quantity", htmlAttributes: new { @class = "control-label" })
+                        @Html.EditorFor(model => model.OrderQuantity, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.OrderQuantity, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="pad-between col-md-1 text-center">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.UnitId, "Unit", htmlAttributes: new { @class = "control-label" })
+                        @Html.DropDownList("UnitId", null, "", htmlAttributes: new { @class = "form-control select2" })
+                        @Html.ValidationMessageFor(model => model.UnitId, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+               
+
+                <div class="pad-between col-md-1 text-center">
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.CommissionPerUnit, "Commission", htmlAttributes: new { @class = "control-label" })
+                        @Html.EditorFor(model => model.CommissionPerUnit, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.CommissionPerUnit, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="pad-between col-md-1 text-center">
+                    <div class="form-group">
+                        <label>Total Carrying Cost</label>
+                        <input type="text" id="totalCarryingCost" class="form-control" disabled="disabled" />
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="">
+            <div class="">
+                <div class="col-md-10">
+                    <br />
+                    <input type="submit" value="Create" class="btn btn-primary" />
+                    <button type="button" class="btn btn-danger" onclick="window.location.href='@Url.Action("Index")';">Cancel</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+}
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}
+
+<script type="text/javascript">
+
+    //$("body").addClass("sidebar-xs");
+
+    $(document).ready(function () {
+
+        $(".select2").select2();
+        $('.datepicker').datepicker({
+            format: 'dd/mm/yyyy',
+            todayHighlight: true,
+            todayBtn: true,
+            autoclose: true
+        });
+
+
+        var selectedVendor = getSelectedVendor();
+        setLocationCategoryList(selectedVendor);
+    });
+
+
+
+    function getSelectedVendor() {
+        var selectedVendor = $('#UserMasId :selected').val();
+        console.log(selectedVendor);
+        return selectedVendor;
+    }
+
+
+    $("#UserMasId").on("change", function () {
+        //var selectedCompanyID = getSelectedCompany();
+        setLocationCategoryList(this.value);
+    })
+
+
+
+
+    $('#UserMasId').change(function () {
+
+        //var id = $('#UserMasId option:selected').val();
+        setLocationCategoryList(this.value);
+
+    });
+
+
+
+    $('#ProductCategoryId').change(function () {
+
+        var id = $('#ProductCategoryId option:selected').val();
+
+        $.ajax({
+            url: "/ProductCategories/GetItemsUnderCat",
+            type: "post",
+            data: {
+                ProductCategoryId: id
+            },
+            dataType: "json",
+            success: function (data) {
+                //$('#SiteId').removeAttr("disabled");
+
+                var listOfSites = data.length;
+
+                var sites = "<select id='sites'>";
+                //sites = sites + '<option value="">--Select--</option>';
+                for (var i = 0; i < listOfSites; i++) {
+                    sites = sites + '<option value=' + data[i].Value + '>' + data[i].Text + '</option>';
+                }
+                sites = sites + '</select>';
+                $('#ItemId').html(sites);
+
+            },
+            error: function (xhr) {
+                alert('error');
+            }
+        });
+
+
+
+        $.ajax({
+            url: "/ProductCategories/GetUnitsUnderCat",
+            type: "post",
+            data: {
+                ProductCategoryId: id
+            },
+            dataType: "json",
+            success: function (data) {
+                //$('#SiteId').removeAttr("disabled");
+
+                var listOfSites = data.length;
+
+                var sites = "<select id='sites'>";
+                //sites = sites + '<option value="">--Select--</option>';
+                //sites = sites + '<option value="">--Select--</option>';
+                for (var i = 0; i < listOfSites; i++) {
+                    sites = sites + '<option value=' + data[i].Value + '>' + data[i].Text + '</option>';
+                }
+                sites = sites + '</select>';
+                $('#UnitId').html(sites);
+
+            },
+            error: function (xhr) {
+                alert('error');
+            }
+        });
+    });
+
+
+
+
+
+    
+    $('#OrderQuantity').on('change', function () {
+        //alert("Handler for .change() called.");
+        var orderQty = $("#OrderQuantity").val();
+        //alert(orderQty);
+        var carryingCost = $("#CommissionPerUnit").val();
+        //alert(carryingCost);
+
+
+        var totalCarryingCost = 0.00;
+
+        totalCarryingCost = orderQty * carryingCost;
+        //alert(totalCarryingCost);
+
+
+        if (isNaN(totalCarryingCost)) {
+            // $('#ModalPOQuantity_Error').text('Unit Price must be a numeric value!').show();
+
+            $('#CommissionPerUnit').val("");
+            $('#totalCarryingCost').val("");
+        }
+        else {
+            //$('#ModalPOQuantity_Error').hide();
+            $('#totalCarryingCost').val(totalCarryingCost);
+        }
+
+
+
+        // $("#productSubtotal").val(totalCost);
+    });
+
+
+
+    $('#CommissionPerUnit').on('change', function () {
+        //alert("Handler for .change() called.");
+
+        var orderQty = $("#OrderQuantity").val();
+        //alert(orderQty);
+        var carryingCost = $("#CommissionPerUnit").val();
+        //alert(carryingCost);
+
+
+        var totalCarryingCost = 0.00;
+
+        totalCarryingCost = orderQty * carryingCost;
+        //alert(totalCarryingCost);
+
+
+        if (isNaN(totalCarryingCost)) {
+            // $('#ModalPOQuantity_Error').text('Unit Price must be a numeric value!').show();
+
+            $('#CommissionPerUnit').val("");
+            $('#totalCarryingCost').val("");
+        }
+        else {
+            //$('#ModalPOQuantity_Error').hide();
+            $('#totalCarryingCost').val(totalCarryingCost);
+        }
+
+
+        // $("#productSubtotal").val(totalCost);
+    });
+
+
+
+    $(".datepicker").attr("autocomplete", "off");
+
+
+
+
+    //$('#UserMasId').change(function () {
+
+
+    //});
+
+
+
+    $('#ProductCategoryId').change(function () {
+
+        var id = $('#ProductCategoryId option:selected').val();
+
+        $.ajax({
+            url: "/ProductCategories/GetItemsUnderCat",
+            type: "post",
+            data: {
+                ProductCategoryId: id
+            },
+            dataType: "json",
+            success: function (data) {
+                //$('#SiteId').removeAttr("disabled");
+
+                var listOfSites = data.length;
+
+                var sites = "<select id='sites'>";
+                //sites = sites + '<option value="">--Select--</option>';
+                for (var i = 0; i < listOfSites; i++) {
+                    sites = sites + '<option value=' + data[i].Value + '>' + data[i].Text + '</option>';
+                }
+                sites = sites + '</select>';
+                $('#ItemId').html(sites);
+
+            },
+            error: function (xhr) {
+                alert('error');
+            }
+        });
+
+
+
+        $.ajax({
+            url: "/ProductCategories/GetUnitsUnderCat",
+            type: "post",
+            data: {
+                ProductCategoryId: id
+            },
+            dataType: "json",
+            success: function (data) {
+                //$('#SiteId').removeAttr("disabled");
+
+                var listOfSites = data.length;
+
+                var sites = "<select id='sites'>";
+                //sites = sites + '<option value="">--Select--</option>';
+                for (var i = 0; i < listOfSites; i++) {
+                    sites = sites + '<option value=' + data[i].Value + '>' + data[i].Text + '</option>';
+                }
+                sites = sites + '</select>';
+                $('#UnitId').html(sites);
+
+            },
+            error: function (xhr) {
+                alert('error');
+            }
+        });
+    });
+
+
+
+    function setLocationCategoryList(selectedVendor) {
+        var id = selectedVendor;
+        // alert(id);
+        // $('#UserMasId').change(function () {
+
+        $.ajax({
+            url: "/PurchaseOrders/GetLocationbyUserMas",
+            type: "post",
+            data: {
+                UserMasId: id
+            },
+            dataType: "json",
+            success: function (data) {
+              
+
+                var categories = "<select id='categories'>";
+                //categories = categories + '<option value="">--Select--</option>';
+                for (var i = 0; i < data.catList.length; i++) {
+                   categories = categories + '<option value=' + data.catList[i].Id + '>' + data.catList[i].Name + '</option>';
+                }
+                categories = categories + '</select>';
+                $('#ProductCategoryId').html(categories);
+
+            },
+            error: function (xhr) {
+                alert('error');
+            }
+        });
+
+        //   });
+
+    }
+
+</script>

@@ -1,0 +1,227 @@
+﻿
+@{
+    ViewBag.Title = "Purchase Order Report";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    <div class="col-md-10">
+        <!-- Basic layout-->
+        <div class="panel panel-flat">
+            <div class="panel-heading">
+                <h5 class="panel-title"><i class="icon-stack-plus position-left"></i>Purchase Order Report</h5><hr />
+                <div class="heading-elements">
+                    <ul class="icons-list">
+                        <li><a data-action="collapse"></a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="panel-body">
+                @using (Html.BeginForm("PurchaseOrderReport", "Report", FormMethod.Post, htmlAttributes: new { @target = "_blank" }))
+                {
+                    <div class="form-horizontal">
+                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                        <div class="form-group">
+
+                            <!--New-->
+                            <!--February Update Test-->
+                            <div class="form-group">
+                                @Html.Label("Project", htmlAttributes: new { @class = "control-label col-md-2" })
+                                <div class="col-md-4">
+
+                                    @Html.DropDownList("ProjectId", null, "--Select--", new { @class = "form-control select2", @Id = "ProjectId" })
+
+
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                @Html.Label("Site", htmlAttributes: new { @class = "control-label col-md-2" })
+                                <div class="col-md-4">
+                                    @Html.DropDownList("SiteId", new SelectList(string.Empty, "Value", "Text"), "--Select--", new { @class = "form-control select2", @Id = "SiteId" })
+
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                @Html.Label("Vendor", htmlAttributes: new { @class = "control-label col-md-2" })
+                                <div class="col-md-4">
+                                    @Html.DropDownList("VendorId", null, "--Select--", htmlAttributes: new { @class = "form-control select2", @id = "VendorId" })
+                                </div>
+                            </div>
+
+
+                            <div class="form-group">
+                                @Html.Label("PO No", htmlAttributes: new { @class = "control-label col-md-2" })
+                                <div class="col-md-4">
+                                    @Html.DropDownList("PONo", new SelectList(string.Empty, "Value", "Text"), "--Select--", new { @class = "form-control select2", @Id = "PONo" })
+
+                                </div>
+                            </div>
+
+
+
+                        </div>
+
+
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-md-offset-2 col-md-4">
+                                                                                  
+                              <button type="submit" class="btn btn-primary" id="generateBtnClick" disabled="disabled"><i class="icon-add position-left" ></i>  Generate Report</button>
+                     
+                        </div>
+                    </div>
+                }
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section scripts
+{
+    @Scripts.Render("~/bundles/jqueryval")
+
+
+    <script src="~/Plugins/select2/select2.min.js"></script>
+    <script>
+        $(".select2").select2();
+    </script>
+
+
+
+
+    <script>
+        $(document).ready(function () {
+            $('#SiteId').attr("disabled", "true");
+            $("#VendorId").attr("disabled", "true");
+            $("#PONo").attr("disabled", "true");
+        });
+
+        $('#ProjectId').change(function () {
+            var id = $('#ProjectId option:selected').val();
+            if ($('#ProjectId option:selected').text() == '--Select--') {
+                $('#SiteId').empty();
+                $('#VendorId').empty();
+                $('#PONo').empty();
+                var sites = "<select id='sites'><option value=''>--Select--</option></select>";
+                $('#SiteId').html(sites);
+                var vendors = "<select id='sites'><option value=''>--Select--</option></select>";
+                $('#VendorId').html(vendors);
+                var poNo = "<select id='sites'><option value=''>--Select--</option></select>";
+                $('#PONo').html(poNo);
+            }
+
+            else {
+                $.ajax({
+                    url: "/PurchaseOrders/GetPId",
+                    type: "post",
+                    data: {
+                        ProjectId: id
+                    },
+                    dataType: "json",
+                    success: function (data) {
+                        $('#SiteId').removeAttr("disabled");
+                        //  $('#ProjectManager').val(data.manager);
+                        var listOfSites = data.Sites.length;
+                        var sites = "<select id='sites'>";
+                        sites = sites + '<option value="">--Select--</option>';
+                        for (var i = 0; i < listOfSites; i++) {
+                            sites = sites + '<option value=' + data.Sites[i].Value + '>' + data.Sites[i].Text + '</option>';
+                        }
+                        sites = sites + '</select>';
+                        $('#SiteId').html(sites);
+                    },
+                    error: function (xhr) {
+                        alert('error');
+                    }
+                });
+            }   
+        });
+
+        $('#SiteId').change(function () {
+            var id = $('#SiteId option:selected').val();        
+            if ($('#SiteId option:selected').text() == '--Select--') {              
+                $('#VendorId').empty();
+                $('#PONo').empty();         
+                var vendors = "<select id='sites'><option value=''>--Select--</option></select>";
+                $('#VendorId').html(vendors);
+                var poNo = "<select id='sites'><option value=''>--Select--</option></select>";
+                $('#PONo').html(poNo);
+            }
+
+            else {
+                $.ajax({
+                    url: "/PurchaseOrders/GetVendorReport",
+                    type: "post",
+                    data: {
+                        SiteId: id
+                    },
+                    dataType: "json",
+                    success: function (data) {
+                        $('#VendorId').removeAttr("disabled");
+                        var listOfSites = data.VendorList.length;
+                        var sites = "<select id='sites'>";
+                        sites = sites + '<option value="">--Select--</option>';
+                        for (var i = 0; i < listOfSites; i++) {
+                            sites = sites + '<option value=' + data.VendorList[i].Value + '>' + data.VendorList[i].Text + '</option>';
+                        }
+                        sites = sites + '</select>';
+                        $('#VendorId').html(sites);
+                    },
+                    error: function (xhr) {
+                        alert('error');
+                    }
+                });
+            }
+        });
+
+        $('#VendorId').change(function () {
+            var id = $('#VendorId option:selected').val();
+            var siteId = $('#SiteId option:selected').val();
+            var projId = $('#ProjectId option:selected').val();
+
+            if ($('#VendorId option:selected').text() == '--Select--') {
+                $('#PONo').empty();            
+                var poNo = "<select id='sites'><option value=''>--Select--</option></select>";
+                $('#PONo').html(poNo);
+            }
+
+            else {
+                $.ajax({
+                    url: "/PurchaseOrders/GetPOReport",
+                    type: "post",
+                    data: {
+                        VendorId: id,
+                        ProjectId: projId,
+                        SiteId: siteId
+                    },
+                    dataType: "json",
+                    success: function (data) {
+                        $('#PONo').removeAttr("disabled");
+                        $('#generateBtnClick').removeAttr("disabled");
+                        var listOfSites = data.POList.length;
+                        var sites = "<select id='sites'>";
+                        sites = sites + '<option value="">--Select--</option>';
+                        for (var i = 0; i < listOfSites; i++) {
+                            sites = sites + '<option value=' + data.POList[i].Value + '>' + data.POList[i].Text + '</option>';
+                        }
+                        sites = sites + '</select>';
+                        $('#PONo').html(sites);
+                    },
+                    error: function (xhr) {
+                        alert('error');
+                    }
+                });
+            }     
+        });
+
+    </script>
+}
+
+
+
+

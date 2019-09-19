@@ -1,0 +1,1560 @@
+﻿
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <!-- Basic layout-->
+        <div class="panel panel-flat">
+            <div class="panel-heading">
+                <h5 class="panel-title"><i class="icon-stack-plus position-left"></i>Materials Tender Quotation</h5><hr />
+                <div class="heading-elements">
+                    <ul class="icons-list">
+                        <li><a data-action="collapse"></a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="panel-body">
+                @using (Html.BeginForm())
+                {
+
+                    <table class="table">
+                        <tr>
+                            <td>Tender No.</td>
+                            <td>
+                                @Html.TextBox("TNo", "", new { @class = "form-control " })
+                                <span class="error" id="TNo_Error"></span>
+                            </td>
+
+                            <td>Tender Date</td>
+                            <td>
+                                @Html.TextBox("TDate", "", new { @class = "form-control datepicker" })
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Specification</td>
+                            <td colspan="3">
+                                @Html.TextBox("Specs", null, new { @class = "form-control" })
+                                <span class="error" id="Specs_Error"></span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Remarks</td>
+                            <td colspan="3">
+                                @Html.TextBox("TenderRemarks", "", new { @class = "form-control" })
+                                <span class="error" id="TenderRemarks_Error"></span>
+                            </td>
+                        </tr>
+                    </table>
+                    <hr />
+                    <div class="details well" style=" border 1px solid black;">
+                        <h4>Tender Items</h4>
+                        <div class="jumbotron" style="padding:10px;">
+                            <table style="width: 100%;">
+                                <tr>
+                                    <td style="font-weight: bold;" class="col-lg-1">Project</td>
+                                    <td class="col-lg-3">
+                                        @Html.DropDownList("ProjectId", null, "--Select--", htmlAttributes: new
+                                   {
+                                       @class = "form-control select2",
+                                       @data_required = "required",
+                                       @id = "ProjectId"
+                                   })
+                                    </td>
+                                    <td style="font-weight: bold;" class="col-lg-1">Site</td>
+                                    <td class="col-lg-3">
+                                        @Html.DropDownList("SiteId", null, "--Select--", htmlAttributes: new
+                                   {
+                                       @class = "form-control select2",
+                                       @data_required = "required",
+                                       @id = "SiteId"
+                                   })
+                                    </td>
+                                    <td style="font-weight: bold;" class="col-lg-1">Req. No.</td>
+                                    <td class="col-lg-3">
+                                        @Html.DropDownList("RCode", null, "--Select--", htmlAttributes: new
+                                   {
+                                       @class = "form-control select2",
+                                       @data_required = "required",
+                                       @id = "RCode"
+                                   })
+                                        <input type="hidden" id="Proc_RequisitionDetId" />
+                                    </td>
+
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td><span class="error" id="ProjectName_Error" style="padding-left:10px;">Project required</span></td>
+                                    <td></td>
+                                    <td><span class="error" id="SiteName_Error" style="padding-left:10px;">Site required</span></td>
+                                    <td></td>
+                                    <td><span class="error" id="ReqNo_Error" style="padding-left:10px;">Req No. required</span></td>
+                                </tr>
+                                <tr>
+                                    <td style="font-weight: bold;" class="col-lg-1">Item</td>
+                                    <td class="col-lg-3">
+                                        @Html.DropDownList("ItemName", null, "--Select--", htmlAttributes: new
+                                   {
+                                       @class = "form-control select2",
+                                       @data_required = "required",
+                                       @id = "ItemName"
+                                   })
+                                    </td>
+
+                                    <td style="font-weight: bold;" class="col-lg-1">Qty</td>
+                                    <td class="col-lg-3">
+                                        <input type="text" id="Qty" class="form-control" disabled="disabled" />
+                                    </td>
+
+                                    <td style="font-weight: bold;" class="col-lg-1">Unit</td>
+                                    <td class="col-lg-3">
+                                        <input type="text" id="UnitName" class="form-control" disabled="disabled" />
+                                        <input type="hidden" id="UnitId" value="" />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="col-lg-1"></td>
+                                    <td class="col-lg-3"><span class="error" id="ItemName_Error">Item required</span></td>
+                                    <td class="col-lg-1"></td>
+                                    <td class="col-lg-3"></td>
+                                    <td class="col-lg-1"></td>
+                                    <td class="col-lg-3"></td>
+                                </tr>
+                                <tr>
+                                    <td style="font-weight: bold;" class="col-lg-1">Vendor</td>
+                                    <td class="col-lg-3">
+                                        @Html.DropDownList("VendorId", null, "--Select--", htmlAttributes: new
+                                   {
+                                       @class = "form-control select2",
+                                       @data_required = "required",
+                                       @id = "VendorId"@*, @style = "width: 150px;"*@ })
+                                    </td>
+                                    <td style="font-weight: bold;" class="col-lg-1">Qtn. No.</td>
+                                    <td class="col-lg-3">
+                                        <input type="text" id="TQNo" class="form-control" />
+                                    </td>
+                                    <td style="font-weight: bold;" class="col-lg-1">Qtn. Date</td>
+                                    <td class="col-lg-3">
+                                        <input type="text" id="TQDate" class="form-control datepicker" />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td><span class="error" id="VendorName_Error" style="padding-left:10px;">Vendor required</span></td>
+                                    <td></td>
+                                    <td><span class="error" id="QtnNo_Error" style="padding-left:10px;">Qtn No. required</span></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+
+                                    <td style="font-weight: bold;" class="col-lg-1">Unit Price</td>
+                                    <td class="col-lg-3">
+                                        <input type="text" id="TQPrice" class="form-control" name="unitPrice" />
+                                    </td>
+
+                                    <td style="font-weight: bold;" class="col-lg-1">Total Price</td>
+                                    <td class="col-lg-3">
+                                        <input type="text" id="TotalPrice" class="form-control" disabled="disabled" />
+                                    </td>
+                                    <td class="col-lg-1">
+                                        <button type="button" id="addNewRow" class="btn btn-info" style="background-color: grey;border: none;"><i class="glyphicon glyphicon-plus"></i></button>
+                                    </td>
+                                    <td class="col-lg-3">
+                                        @*<input type="button" id="addNewRow" value="ADD" class="btn btn-primary btn-sm" style="background-color: grey;border: none;" />*@
+                                      
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td></td>
+                                    <td><span class="error" id="UnitPrice_Error" style="padding-left:10px;">Unit Price required</span></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+
+                            </table>
+                            <br />
+                            <div class="table-responsive scrolling">
+                                <table class="Resource-list table table-bordered" id="RequisitionDetails">
+                                    <thead>
+                                        <tr class="bg-grey">
+                                            @*<th>Sl. No.</th>*@
+                                            <th>Project Name</th>
+                                            <th>Site</th>
+                                            <th>Req. No.</th>
+                                            <th>Item Name</th>
+                                            <th>Qty</th>
+                                            <th>Unit</th>
+                                            <th>Vendor Name</th>
+                                            <th>Qtn. No.</th>
+                                            <th>Qtn. Date</th>
+                                            <th>Unit Price</th>
+                                            <th>Total Price</th>
+                                            <th>&nbsp;</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                }
+            </div>
+
+        </div>
+
+    </div>
+    <div class="form-group">
+        <div class="col-md-offset-5 col-md-10">
+            @*@Html.ActionLink("Back to List", "Index", null, new { @class = "btn btn-info" , @style = "background-color: grey;border: none;" })*@
+            <button type="button" id="SaveItem" class="btn btn-primary"><i class="icon-add position-left"></i>Create</button>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="detailForm" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+    <div class="modal-dialog" role="document" style="overflow-y: scroll; max-height:85%;  margin-top: 50px; margin-bottom:50px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="staffModalTitle">Edit Item</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="panel-body">
+                    @Html.AntiForgeryToken()
+                    <div class="form-horizontal">
+                        <div class="form-group">
+                            <input type="hidden" id="ModalTaskId" />
+                            <input type="hidden" id="ProjectId" value="" />
+                        </div>
+                        <div class="form-group">
+                            @Html.Label("Project Name", htmlAttributes: new
+                       {
+                           @class = "control-label col-md-2"@*, @style="font-weight:bold;"*@ })
+                            <div class="col-md-10">
+
+                                @Html.DropDownList("ProjectId", null, "--Select--", htmlAttributes: new { @class = "form-control select2", @data_required = "required", @id = "ModalProjectId" })
+                                <span class="error" id="ModalProjectName_Error"></span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            @Html.Label("Site", htmlAttributes: new { @class = "control-label col-md-2" })
+                            <div class="col-md-10">
+                                @*<input type="hidden" id="modalunitId" />*@
+                                @Html.DropDownList("SiteId", null, "--Select--", htmlAttributes: new { @class = "form-control select2", @data_required = "required", @id = "ModalSiteId" })
+                                <span class="error" id="ModalSiteName_Error"></span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            @Html.Label("Req No", htmlAttributes: new { @class = "control-label col-md-2" })
+                            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                            <div class="col-md-10">
+                                <input type="hidden" id="ModalProc_RequisitionDetId" />
+                                @Html.DropDownList("RCode", null, "--Select--", htmlAttributes: new { @class = "form-control select2", @data_required = "required", @id = "ModalRequisition" })
+                                <span class="error" id="ModalReqNo_Error"></span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            @Html.Label("Item Name", htmlAttributes: new { @class = "control-label col-md-2" })
+                            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                            <div class="col-md-10">
+                                @Html.DropDownList("ItemName", null, "--Select--", htmlAttributes: new { @class = "form-control select2", @data_required = "required", @id = "ModalItemName" })
+                                <span class="error" id="ModalItemName_Error"></span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            @Html.Label("Qty", htmlAttributes: new { @class = "control-label col-md-2" })
+                            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                            <div class="col-md-10">
+                                @Html.TextBox("ModalQty", null, new { @class = "form-control", @disabled = "disabled" })
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            @Html.Label("Unit", htmlAttributes: new { @class = "control-label col-md-2" })
+                            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                            <div class="col-md-10">
+                                <input type="hidden" id="ModalUnit" />
+                                @Html.TextBox("ModalUnitName", null, new { @class = "form-control" })
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            @Html.Label("Vendor Name", htmlAttributes: new { @class = "control-label col-md-2" })
+                            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                            <div class="col-md-10">
+                                @Html.DropDownList("VendorId", null, "--Select--", htmlAttributes: new { @class = "form-control select2", @data_required = "required", @id = "ModalVendor" })
+                                <span class="error" id="ModalVendorName_Error"></span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            @Html.Label("Qtn No", htmlAttributes: new { @class = "control-label col-md-2" })
+                            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                            <div class="col-md-10">
+                                @Html.TextBox("ModalQtnNo", null, new { @class = "form-control" })
+                                <span class="error" id="ModalQtnNo_Error"></span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            @Html.Label("Qtn Date", htmlAttributes: new { @class = "control-label col-md-2" })
+                            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                            <div class="col-md-10">
+                                @Html.TextBox("ModalQtnDate", null, new { @class = "form-control datepicker" })
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            @Html.Label("Unit Price", htmlAttributes: new { @class = "control-label col-md-2" })
+                            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                            <div class="col-md-10">
+                                @Html.TextBox("ModalUnitPrice", null, new { @class = "form-control" })
+                                <span class="error" id="ModalUnitPrice_Error"></span>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            @Html.Label("Total", htmlAttributes: new { @class = "control-label col-md-2" })
+                            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                            <div class="col-md-10">
+                                @Html.TextBox("ModalTotal", null, new { @class = "form-control" })
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <div class="col-md-offset-2 col-md-10">
+                                <button type="submit" class="btn btn-primary" id="ModalDetailSave">Save</button>
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal" id="ModalClose">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    var counter = 0; //counter for the serial
+    var selRow;
+    var taskCounter = 0;
+
+    $(document).ready(function () {
+        RebindDatePicker();
+        //$('.select2').select2();
+        //$(".datepicker").datepicker({ dateFormat: 'dd/mm/yy', changeYear: true });
+        $('#SiteId').attr("disabled", "true");
+        $("#RCode").attr("disabled", "true");
+        $("#ItemName").attr("disabled", "true");
+
+        $('#TNo_Error').hide();
+        $('#Specs_Error').hide();
+        $('#TenderRemarks_Error').hide();
+
+        $('#ProjectName_Error').hide();
+        $('#SiteName_Error').hide();
+        $('#ReqNo_Error').hide();
+        $('#ItemName_Error').hide();
+        $('#VendorName_Error').hide();
+        $('#QtnNo_Error').hide();
+        $('#UnitPrice_Error').hide();
+
+        $('#ModalProjectName_Error').hide();
+        $('#ModalSiteName_Error').hide();
+        $('#ModalReqNo_Error').hide();
+        $('#ModalItemName_Error').hide();
+        $('#ModalVendorName_Error').hide();
+        $('#ModalQtnNo_Error').hide();
+        $('#ModalUnitPrice_Error').hide();
+
+        $("input[name=TQDate]").datepicker({
+            format: 'dd/mm/yyyy',
+            todayHighlight: true,
+            todayBtn: true,
+            autoclose: true
+        });
+
+    });
+
+    $('#ProjectId').change(function () {
+        var id = $('#ProjectId option:selected').val();
+
+        if ($('#ProjectId option:selected').text() == "--Select--")
+        {
+            $('#SiteId').empty();
+            $('#RCode').empty();
+            $('#ItemName').empty();
+
+            var sites = "<select id='sites'><option value=''>--Select--</option></select>";
+
+            $('#SiteId').html(sites);
+            $('#RCode').html(sites);
+            $('#ItemName').html(sites);
+            $('#UnitId').val("");
+            $('#UnitName').val("");
+            $('#ModalQty').val("");
+            $('#VendorId').val("");
+            $('#Qty').val("");
+            $('#TQNo').val("");
+            $('#TQDate').val("");
+            $('#TQPrice').val("");
+            $('#TotalPrice').val("");
+        }
+        else {
+            $.ajax({
+                url: "/TenderQuotation/GetSites",
+                type: "post",
+                data: {
+                    ProjectId: id
+                },
+                dataType: "json",
+                success: function (data) {
+                    $('#SiteId').removeAttr("disabled");
+                    var listOfSites = data.Sites.length;
+
+                    $('#SiteId').empty();
+                    $('#RCode').empty();
+                    $('#ItemName').empty();
+                    var sites = "<select id='sites'><option value=''>--Select--</option></select>";
+                    $('#RCode').html(sites);
+                    $('#ItemName').html(sites);
+                    $('#UnitId').val("");
+                    $('#UnitName').val("");
+                    $('#ModalQty').val("");
+                    $('#VendorId').val("");
+                    $('#Qty').val("");
+                    $('#TQNo').val("");
+                    $('#TQDate').val("");
+                    $('#TQPrice').val("");
+                    $('#TotalPrice').val("");
+
+
+                    var sites = "<select id='sites'>";
+                    sites = sites + '<option value="">--Select--</option>';
+                    for (var i = 0; i < listOfSites; i++) {
+                        sites = sites + '<option value=' + data.Sites[i].Value + '>' + data.Sites[i].Text + '</option>';
+                    }
+                    sites = sites + '</select>';
+                    $('#SiteId').html(sites);
+
+                },
+                error: function (xhr) {
+                    alert('error');
+                }
+            });
+        }
+
+    
+    });
+
+
+    $("#SiteId").change(function () {
+        var SiteId = $('#SiteId option:selected').val();
+        var ProjectId = $('#ProjectId option:selected').val();
+        
+        if ($('#SiteId option:selected').text() == "--Select--")
+        {
+            $('#RCode').empty();
+            $('#ItemName').empty();
+
+            var sites = "<select id='sites'><option value=''>--Select--</option></select>";
+
+            $('#RCode').html(sites);
+            $('#ItemName').html(sites);
+            $('#UnitId').val("");
+            $('#UnitName').val("");
+            $('#ModalQty').val("");
+            $('#VendorId').val("");
+            $('#Qty').val("");
+            $('#TQNo').val("");
+            $('#TQDate').val("");
+            $('#TQPrice').val("");
+            $('#TotalPrice').val("");
+        }
+        else {
+            $.ajax({
+                type: "post",
+                url: "/TenderQuotation/GetReqNo",
+                data: { SiteId, ProjectId },
+                datatype: "json",
+                traditional: true,
+                success: function (data) {
+                    //$('#SiteEngineer').val(data.siteEngineer);
+                    $('#RCode').removeAttr("disabled");
+
+                    $('#RCode').empty();
+                    $('#ItemName').empty();
+                    var sites = "<select id='sites'><option value=''>--Select--</option></select>";
+                    $('#ItemName').html(sites);
+                    $('#UnitId').val("");
+                    $('#UnitName').val("");
+                    $('#ModalQty').val("");
+                    $('#VendorId').val("");
+                    $('#Qty').val("");
+                    $('#TQNo').val("");
+                    $('#TQDate').val("");
+                    $('#TQPrice').val("");
+                    $('#TotalPrice').val("");
+
+                    var listOfitems = data.Items.length;
+                    var items = "<select id='RCode'>";
+                    items = items + '<option value="">--Select--</option>';
+                    for (var i = 0; i < listOfitems; i++) {
+                        items = items + '<option value=' + data.Items[i].Value + '>' + data.Items[i].Text + '</option>';
+                    }
+                    items = items + '</select>';
+                    $('#RCode').html(items);
+
+                }
+
+            });
+        }
+
+   
+    });
+
+    $("#RCode").change(function () {
+        var Rcode = $('#RCode  option:selected').text();
+        var SiteId = $('#SiteId  option:selected').val();
+        var ProjectId = $('#ProjectId option:selected').val();
+
+        if ($('#RCode  option:selected').text() == "--Select--")
+        {
+            $('#ItemName').empty();
+            var sites = "<select id='sites'><option value=''>--Select--</option></select>";
+            $('#ItemName').html(sites);
+            $('#UnitId').val("");
+            $('#UnitName').val("");
+            $('#ModalQty').val("");
+            $('#VendorId').val("");
+            $('#Qty').val("");
+            $('#TQNo').val("");
+            $('#TQDate').val("");
+            $('#TQPrice').val("");
+            $('#TotalPrice').val("");
+        }
+        else {
+            $.ajax({
+                type: "post",
+                url: "/TenderQuotation/GetReqitem",
+                data: { Rcode },
+                datatype: "json",
+                traditional: true,
+                success: function (data) {
+                    //$('#SiteEngineer').val(data.siteEngineer);
+                    $('#ItemName').removeAttr("disabled");
+                    $('#Proc_RequisitionDetId').val(data.Proc_RequisitionDetId);
+                    //alert('Requisition ID' + data.Proc_RequisitionDetId);
+                    //alert($('#Proc_RequisitionDetId').val());
+                    var listOfitems = data.Items.length;
+                    //alert('List: ' + listOfitems);
+                    var items = "<select id='ItemName'>";
+                    items = items + '<option value="">--Select--</option>';
+                    for (var i = 0; i < listOfitems; i++) {
+                        items = items + '<option value=' + data.Items[i].Value + '>' + data.Items[i].Text + '</option>';
+                    }
+                    items = items + '</select>';
+                    $('#ItemName').html(items);
+
+                    $('#UnitId').val("");
+                    $('#UnitName').val("");
+                    $('#ModalQty').val("");
+                    $('#VendorId').val("");
+                    $('#Qty').val("");
+                    $('#TQNo').val("");
+                    $('#TQDate').val("");
+                    $('#TQPrice').val("");
+                    $('#TotalPrice').val("");
+                }
+
+            });
+        }
+ 
+    });
+
+    $("#ItemName").change(function () {
+        var ItemId = $('#ItemName option:selected').val();
+        var Rcode = $('#RCode  option:selected').text();
+        var SiteId = $('#SiteId  option:selected').val();
+
+        if ($('#ItemName option:selected').text() == "--Select--") {
+            $('#UnitId').val("");
+            $('#UnitName').val("");
+            $('#ModalQty').val("");
+            $('#VendorId').val("");
+            $('#Qty').val("");
+            $('#TQNo').val("");
+            $('#TQDate').val("");
+            $('#TQPrice').val("");
+            $('#TotalPrice').val("");
+        }
+        else {
+            $.ajax({
+                type: "post",
+                url: "/TenderQuotation/GetUnit",
+                data: { ItemId, Rcode, SiteId },
+                datatype: "json",
+                traditional: true,
+                success: function (data) {
+                    $('#UnitId').val(data.UnitId);
+                    $('#UnitName').val(data.UnitName);
+                    $('#Qty').val(data.Qty);
+
+                    //alert('data.Proc_RequisitionDetId' + data.Proc_RequisitionDetId);
+                    $('#Proc_RequisitionDetId').val(data.Proc_RequisitionDetId);
+                    //alert('data.Proc_RequisitionDetId after' + $('#Proc_RequisitionDetId').val());
+                }
+
+            });
+        }
+
+    });
+
+
+    $(document).on({
+        'change': function () {
+            var price = $(this).val();
+            //alert('Unit Price :' + price);
+            var quantity = $('#Qty').val();
+            var totalPrice = price * quantity;
+            if (isNaN(totalPrice)) {
+                alert('Unit Price must be a numeric value!!')
+                $('#TQPrice').val("");
+                $('#TotalPrice').val("");
+            }
+            else {
+                $('#TotalPrice').val(totalPrice);
+            }
+
+
+        }
+    }, 'input[name=unitPrice]');
+
+
+    $(document).on({
+        'change': function () {
+            var price = $(this).closest('tr').find("td:eq(9) input.TQPrice").val();
+            //var row = $(this).closest('tr');
+
+            //alert('Unit Price :' + price);
+            var quantity = $(this).closest('tr').find("td:eq(4) input.Qty").val();
+            //alert('quantity :' + quantity);
+            var totalPrice = price * quantity;
+
+            if (isNaN(totalPrice)) {
+                alert('Unit Price must be a numeric value!!')
+                //$('#TQPrice').val("");
+                //$('#TotalPrice').val("");
+            }
+            else {
+                $(this).closest('tr').find("td:eq(10) input.TotalPrice").val(totalPrice);
+            }
+
+
+        }
+    }, 'input[name=TQPrice]');
+
+    $('#TQNo').change(function () {
+        var qtn = $('#TQNo').val();
+        if (qtn == "") {
+
+        }
+        else {
+            $.ajax({
+                type: "post",
+                url: "/TenderQuotation/checkQuotationNo",
+                data: { QtnNo: qtn },
+                datatype: "json",
+                traditional: true,
+                success: function (data) {
+                    if (data.flag == false) {
+                        alert(data.message);
+                        $('#TQNo').val("");
+                    }
+                }
+
+            });
+        }
+    });
+
+    //add new row
+    $('#addNewRow').click(function (event) {
+        event.preventDefault();
+        counter++;
+        var isAllValid = true;
+        var ProjectId = $('#ProjectId option:selected').val();
+        var ProjectName = $('#ProjectId option:selected').text();
+        //alert(ProjectName);
+        var SiteId = $('#SiteId option:selected').val();
+        var SiteName = $('#SiteId option:selected').text();
+        //alert(SiteId);
+        //var Qty = $('#Qty').val();
+        var RCode = $('#RCode option:selected').val();
+        var RCodeName = $('#RCode option:selected').text();
+
+        var ItemId = $('#ItemName option:selected').val();
+        var ItemName = $('#ItemName option:selected').text();
+        var Proc_RequisitionDetId = $('#Proc_RequisitionDetId').val();
+        //alert('ProcRequisitionDetId: ' + Proc_RequisitionDetId);
+
+        var Qty = $('#Qty').val();
+
+        var UnitId = $('#UnitId').val();
+        var UnitName = $('#UnitName').val();
+        //alert(Unit);
+        //alert(UnitId);
+        var VendorId = $('#VendorId option:selected').val();
+        //alert('Vendor Id: ' + VendorId);
+        var VendorName = $('#VendorId option:selected').text();
+
+        var TQNo = $('#TQNo').val();
+        var TQDate = $('#TQDate').val();
+        var TQPrice = $('#TQPrice').val();
+        //alert(ReqQty);
+        var TotalPrice = $('#TotalPrice').val();
+        //alert('TotalPrice: ' + TotalPrice);
+        var Status = 'N';
+
+        if (ProjectName.trim() == "" || ProjectName.trim() == "--Select--") {
+            $('#ProjectName_Error').show();
+            isAllValid = false;
+        }
+        else {
+            $('#ProjectName_Error').hide();
+        }
+        if (SiteName.trim() == "" || SiteName.trim() == "--Select--") {
+            $('#SiteName_Error').show();
+            isAllValid = false;
+        }
+        else {
+            $('#SiteName_Error').hide();
+        }
+        if (RCode.trim() == "" || RCode.trim() == "--Select--") {
+            $('#ReqNo_Error').show();
+            isAllValid = false;
+        }
+        else {
+            $('#ReqNo_Error').hide();
+        }
+        if (ItemName.trim() == "" || ItemName.trim() == "--Select--") {
+            $('#ItemName_Error').show();
+            isAllValid = false;
+        }
+        else {
+            $('#ItemName_Error').hide();
+        }
+        if (VendorName.trim() == "" || VendorName.trim() == "--Select--") {
+            $('#VendorName_Error').show();
+            isAllValid = false;
+        }
+        else {
+            $('#VendorName_Error').hide();
+        }
+
+        if (TQPrice.trim() == "") {
+            $('#UnitPrice_Error').show();
+            isAllValid = false;
+        }
+        else {
+            if (isNaN(TQPrice.trim())) {
+                isAllValid = false;
+                $('#UnitPrice_Error').text("Unit price must be a numeric value!").show();
+            }
+            else {
+                if (TQPrice.trim().length > 18) {
+                    isAllValid = false;
+                    $('#UnitPrice_Error').text("Unit price can not be greater than 18 characters!").show();
+                }
+                else {
+                    $('#UnitPrice_Error').hide();
+                }
+            }
+        }
+
+        if (TQNo.trim().length > 50) {
+            $('#QtnNo_Error').text("Qtn No. can not be greater than 50 characters!").show();
+            isAllValid = false;
+        }
+        else {
+            $('#QtnNo_Error').hide();
+        }
+
+        $('table.Resource-list tbody tr').each(function () {
+            var Itemname = $(this).find("td input[name=ItemId]").val();
+            var Vendorname = $(this).find("td input[name=Vendor]").val();
+            //var task = $(this).find("td input[name=TaskId]").val();
+
+            //if (task != TaskId.trim()) {
+            if (ItemId.trim() == Itemname.trim() && VendorId.trim() == Vendorname.trim()) {
+                alert('Same Vendor against this item exists!');
+                isAllValid = false;
+            }
+            //}
+        });
+
+        if (isAllValid) {
+            taskCounter++;
+            var newRow = jQuery('<tr>'
+                + '<td><input type="hidden" name="TaskId" value="' + taskCounter + '"/><input value="' + ProjectId + '" type="hidden" name="ProjectId" disabled="disabled"/><label name="label_ProjectName" style="width:150px;">' + ProjectName + '</label><input class="form-control" value="' + ProjectName + '" type="hidden" name="ProjectName" disabled="disabled" style="width:110px;"/></td>'
+                + '<td><input value="' + SiteId + '" type="hidden" name="SiteId"/><label name="label_SiteName"  style="width:150px;">' + SiteName + '</label><input class="form-control" value="' + SiteName + '" type="hidden" name="SiteName" disabled="disabled" style="width:110px;"/></td>'
+                + '<td><input value="' + RCode + '" type="hidden" name="RCode" class="form-control" style="width:90px;"/><label name="label_RCodeName"  style="width:100px;">' + RCodeName + '</label><input value="' + RCodeName + '" type="hidden" name="RCodeName" class="form-control" style="width:90px;"/><input value="' + Proc_RequisitionDetId + '" type="hidden" name="Proc_RequisitionDetId"/></td>'
+                + '<td><input value="' + ItemId + '" type="hidden" name="ItemId"/><label name="label_ItemName"  style="width:150px;">' + ItemName + '</label><input class="form-control" value="' + ItemName + '" type="hidden" name="ItemName" disabled="disabled" style="width:80px;"/>'
+                + '<td><input value="' + Qty + '" type="hidden" name="Qty" class="form-control Qty" style="width:90px;"/><label name="label_Qty">' + Qty + '</label></td>'
+                + '<td><input value="' + UnitId + '" type="hidden" name="UnitId"/><label name="label_UnitName">' + UnitName + '</label><input class="form-control" value="' + UnitName + '" type="hidden" name="UnitName" disabled="disabled" style="width:80px;"/></td>'
+                + '<td><input value="' + VendorId + '" type="hidden" name="Vendor"/><label name="label_VendorName"  style="width:150px;">' + VendorName + '</label><input class="form-control" value="' + VendorName + '" type="hidden" name="VendorName" disabled="disabled" style="width:80px;"/></td>'
+                + '<td><input value="' + TQNo + '" type="hidden" name="TQNo" class="form-control" style="width:90px;"/><label name="label_TQNo" style="width:100px;">' + TQNo + '</label></td>'
+                + '<td><input value="' + TQDate + '" type="hidden" name="TQDate" class="form-control datepicker" style="width:90px;"/><label name="label_TQDate">' + TQDate + '</label></td>'
+                + '<td><input value="' + TQPrice + '" type="hidden" name="TQPrice" class="form-control TQPrice" style="width:90px;"/><label name="label_TQPrice">' + TQPrice + '</label></td>'
+                + '<td><input value="' + TotalPrice + '" type="hidden" name="TotalPrice" class="form-control TotalPrice" style="width:90px;" disabled="disabled"/><label name="label_TotalPrice">' + TotalPrice + '</label></td>'
+                + '<td><input value="' + Status + '" type="hidden" name="Status"/>'
+                + '<button type="button" id="editSite" class="btn text-primary-400 btn-flat btn-icon btn-rounded  btn-xs editSite " data-toggle="modal" data-target="#detailForm"><i class="icon-pencil"></i></button>'
+                + ' <button class="btn text-warning-600 btn-flat btn-icon btn-rounded delete_btn"  onclick="$(this).parent().parent().remove();"><i class="icon-cross"></i></button>'
+                + '</td></tr>');
+
+
+            jQuery('table.Resource-list tbody').append(newRow);
+
+            $('#ProjectId').val("");
+            $('#SiteId').val("");
+            $('#RCode').val("");
+            $('#ItemName').val("");
+            $('#Qty').val("");
+            $('#UnitName').val("");
+            $('#VendorId').val("");
+            $('#TQNo').val("");
+            $('#TQDate').val("");
+            $('#TQPrice').val("");
+            $('#TotalPrice').val("");
+
+            $('#SiteId').attr("disabled", true);
+            $('#RCode').attr("disabled", true);
+            $('#ItemName').attr("disabled", true);
+
+            RebindDatePicker();
+
+            $('.editSite').click(function () {
+                var row = $(this).closest('tr');
+                selRow = $(this).closest('tr');
+
+                var TaskId = row.find('input[name=TaskId]').val();
+                var ProjectId = row.find('input[name=ProjectId]').val();
+                var ProjectName = row.find('input[name=ProjectName]').val();
+                var SiteId = row.find('input[name=SiteId]').val();
+                var SiteName = row.find('input[name=SiteName]').val();
+                var RCode = row.find('input[name=RCode]').val();
+                var itemId = row.find('input[name=ItemId]').val();
+                var Qty = row.find('input[name=Qty]').val();
+                var UnitId = row.find('input[name=UnitId]').val();
+                var UnitName = row.find('input[name=UnitName]').val();
+                var Vendor = row.find('input[name=Vendor]').val();
+                var TQNo = row.find('input[name=TQNo]').val();
+                var TQDate = row.find('input[name=TQDate]').val();
+                var TQPrice = row.find('input[name=TQPrice]').val();
+                var TotalPrice = row.find('input[name=TotalPrice]').val();
+
+                RebindModalfields(ProjectId, SiteId, RCode, itemId);
+
+                $('#ModalTaskId').val(TaskId);
+                $('#ModalProjectId').val(ProjectId);
+                //$('#ModalSiteId').val(SiteId);
+                //$('#ModalRequisition').val(RCode);
+                //$('#ModalItemName').val(itemId);
+                $('#ModalQty').val(Qty);
+                $('#ModalUnit').val(UnitId);
+                $('#ModalUnitName').val(UnitName);
+                $('#ModalVendor').val(Vendor);
+                $('#ModalQtnNo').val(TQNo);
+                $('#ModalQtnDate').val(TQDate);
+                $('#ModalUnitPrice').val(TQPrice);
+                $('#ModalTotal').val(TotalPrice);
+
+
+                //$('#ModalSiteId').attr("disabled", "true");
+                //$('#ModalRequisition').attr("disabled", "true");
+                //$('#ModalItemName').attr("disabled", "true");
+                $('#ModalQty').attr("disabled", "true");
+                $('#ModalUnitName').attr("disabled", "true");
+                $('#ModalTotal').attr("disabled", "true");
+            });
+
+        }
+
+    });
+
+    function RebindModalfields(ProjectId, SiteId, RCode, itemId) {
+        $.ajax({
+            type: "post",
+            url: "/TenderQuotation/RebindModal",
+            data: {ProjectId: ProjectId,SiteId: SiteId,RCode: RCode,itemId: itemId },
+            datatype: "json",
+            traditional: true,
+            success: function (data) {
+                var listOfSites = data.Sites.length;
+                var sites = "<select id='ModalSiteId'>";
+                sites = sites + '<option value="">--Select--</option>';
+                for (var i = 0; i < listOfSites; i++) {
+                    sites = sites + '<option value=' + data.Sites[i].Value + '>' + data.Sites[i].Text + '</option>';
+                }
+                sites = sites + '</select>';
+                $('#ModalSiteId').html(sites);
+                $('#ModalSiteId').val(SiteId);
+
+                var listOfReqs = data.Reqs.length;
+                var Reqs = "<select id=''>";
+                Reqs = Reqs + '<option value="">--Select--</option>';
+                for (var i = 0; i < listOfReqs; i++) {
+                    Reqs = Reqs + '<option value=' + data.Reqs[i].Value + '>' + data.Reqs[i].Text + '</option>';
+                }
+                Reqs = Reqs + '</select>';
+                $('#ModalRequisition').html(Reqs);
+                $('#ModalRequisition').val(RCode);
+
+                var listOfitems = data.Items.length;
+                var Items = "<select id=''>";
+                Items = Items + '<option value="">--Select--</option>';
+                for (var i = 0; i < listOfitems; i++) {
+                    Items = Items + '<option value=' + data.Items[i].Value + '>' + data.Items[i].Text + '</option>';
+                }
+                Items = Items + '</select>';
+                $('#ModalItemName').html(Items);
+                $('#ModalItemName').val(itemId);
+            }
+
+        });
+    }
+
+
+    $('#ModalDetailSave').click(function () {
+        var isAllValid = true;
+
+        var TaskId = $('#ModalTaskId').val();
+        var ModalProjectId = $('#ModalProjectId option:selected').val();
+        var ModalProjectName = $('#ModalProjectId option:selected').text();
+        var ModalSiteId = $('#ModalSiteId option:selected').val();
+        var ModalSiteName = $('#ModalSiteId option:selected').text();
+        var ModalRequisition = $('#ModalRequisition option:selected').val();
+        var ModalRCodeName = $('#ModalRequisition option:selected').text();
+        var ModalItemId = $('#ModalItemName option:selected').val();
+        var ModalItemName = $('#ModalItemName option:selected').text();
+        var ModalProc_RequisitionDetId = $('#ModalProc_RequisitionDetId').val();
+        var ModalQty = $('#ModalQty').val();
+        var ModalUnit = $('#ModalUnit').val();
+        var ModalUnitName = $('#ModalUnitName').val();
+        var ModalVendorId = $('#ModalVendor option:selected').val();
+        var ModalVendorName = $('#ModalVendor option:selected').text();
+        var ModalQtnNo = $('#ModalQtnNo').val();
+        var ModalQtnDate = $('#ModalQtnDate').val();
+        var ModalUnitPrice = $('#ModalUnitPrice').val();
+        var ModalTotal = $('#ModalTotal').val();
+
+
+        if (ModalProjectName.trim() == "" || ModalProjectName.trim() == "--Select--") {
+            $('#ModalProjectName_Error').text("Project required").show();
+            isAllValid = false;
+        }
+        else {
+            $('#ModalProjectName_Error').hide();
+        }
+        if (ModalSiteName.trim() == "" || ModalSiteName.trim() == "--Select--") {
+            $('#ModalSiteName_Error').text("Site required").show();
+            isAllValid = false;
+        }
+        else {
+            $('#ModalSiteName_Error').hide();
+        }
+        if (ModalRCodeName.trim() == "" || ModalRCodeName.trim() == "--Select--") {
+            $('#ModalReqNo_Error').text("Requisition required").show();
+            isAllValid = false;
+        }
+        else {
+            $('#ModalReqNo_Error').hide();
+        }
+        if (ModalItemName.trim() == "" || ModalItemName.trim() == "--Select--") {
+            $('#ModalItemName_Error').text("Item required").show();
+            isAllValid = false;
+        }
+        else {
+            $('#ModalItemName_Error').hide();
+        }
+        if (ModalVendorName.trim() == "" || ModalVendorName.trim() == "--Select--") {
+            $('#ModalVendorName_Error').text("Vendor required").show();
+            isAllValid = false;
+        }
+        else {
+            $('#ModalVendorName_Error').hide();
+        }
+        if (ModalUnitPrice.trim() == "") {
+            $('#ModalUnitPrice_Error').text("Unit Price required").show();
+            isAllValid = false;
+        }
+        else {
+            if (ModalUnitPrice.trim().length > 18) {
+                isAllValid = false;
+                $('#ModalUnitPrice_Error').text("Unit price can not be greater than 18 characters!").show();
+            }
+            else {
+                $('#ModalUnitPrice_Error').hide();
+            }
+            $('#ModalUnitPrice_Error').hide();
+        }
+
+
+        if (ModalQtnNo.trim().length > 50) {
+            $('#ModalQtnNo_Error').text("Qtn No. can not be greater than 50 characters!").show();
+            isAllValid = false;
+        }
+        else {
+            $('#ModalQtnNo_Error').hide();
+        }
+
+
+        //validation for checking duplicate item
+        $('table.Resource-list tbody tr').each(function () {
+            var Itemname = $(this).find("td input[name=ItemId]").val();
+            var Vendorname = $(this).find("td input[name=Vendor]").val();
+            var task = $(this).find("td input[name=TaskId]").val();
+
+            if (task != TaskId.trim()) {
+                if (ModalItemId.trim() == Itemname.trim() && ModalVendorId.trim() == Vendorname.trim()) {
+                    alert('Same Vendor against this item exists!');
+                    isAllValid = false;
+                }
+            }
+        });
+
+
+        if (isAllValid) {
+            selRow.find('input[name=ProjectId]').val(ModalProjectId);
+            selRow.find('input[name=ProjectName]').val(ModalProjectName);
+            selRow.find('input[name=SiteId]').val(ModalSiteId);
+            selRow.find('input[name=SiteName]').val(ModalSiteName);
+            selRow.find('input[name=RCode]').val(ModalRequisition);
+            selRow.find('input[name=RCodeName]').val(ModalRCodeName);
+            selRow.find('input[name=ItemId]').val(ModalItemId);
+            selRow.find('input[name=ItemName]').val(ModalItemName);
+            selRow.find('input[name=Qty]').val(ModalQty);
+            selRow.find('input[name=UnitName]').val(ModalUnitName);
+            selRow.find('input[name=UnitId]').val(ModalUnit);
+            selRow.find('input[name=Vendor]').val(ModalVendorId);
+            selRow.find('input[name=VendorName]').val(ModalVendorName);
+            selRow.find('input[name=TQNo]').val(ModalQtnNo);
+            selRow.find('input[name=TQDate]').val(ModalQtnDate);
+            selRow.find('input[name=TQPrice]').val(ModalUnitPrice);
+            selRow.find('input[name=TotalPrice]').val(ModalTotal);
+            selRow.find('input[name= Proc_RequisitionDetId]').val(ModalProc_RequisitionDetId);
+           
+            selRow.find('label[name=label_ProjectName]').text(ModalProjectName);
+            selRow.find('label[name=label_SiteName]').text(ModalSiteName);
+            selRow.find('label[name=label_RCodeName]').text(ModalRCodeName);
+            selRow.find('label[name=label_ItemName]').val(ModalItemName);
+            selRow.find('label[name=label_Qty]').text(ModalQty);
+            selRow.find('label[name=label_UnitName]').text(ModalUnitName);
+            selRow.find('label[name=label_VendorName]').text(ModalVendorName);
+            selRow.find('label[name=label_TQNo]').text(ModalQtnNo);
+            selRow.find('label[name=label_TQDate]').text(ModalQtnDate);
+            selRow.find('label[name=label_TQPrice]').text(ModalUnitPrice);
+            selRow.find('label[name=label_TotalPrice]').text(ModalTotal);
+
+
+            $('#detailForm').modal('hide');
+            totalItemCost();
+        }
+        //else {
+        //    var TaskId = selRow.find('input[name=TaskId]').val();
+        //    var ProjectId = selRow.find('input[name=ProjectId]').val();
+        //    var ProjectName = selRow.find('input[name=ProjectName]').val();
+        //    var SiteId = selRow.find('input[name=SiteId]').val();
+        //    var SiteName = selRow.find('input[name=SiteName]').val();
+        //    var RCode = selRow.find('input[name=RCode]').val();
+        //    var itemId = selRow.find('input[name=ItemId]').val();
+        //    var Qty = selRow.find('input[name=Qty]').val();
+        //    var UnitId = selRow.find('input[name=UnitId]').val();
+        //    var UnitName = selRow.find('input[name=UnitName]').val();
+        //    var Vendor = selRow.find('input[name=Vendor]').val();
+        //    var TQNo = selRow.find('input[name=TQNo]').val();
+        //    var TQDate = selRow.find('input[name=TQDate]').val();
+        //    var TQPrice = selRow.find('input[name=TQPrice]').val();
+        //    var TotalPrice = selRow.find('input[name=TotalPrice]').val();
+
+        //    $('#ModalTaskId').val(TaskId);
+        //    $('#ModalProjectId').val(ProjectId);
+        //    $('#ModalSiteId').val(SiteId);
+        //    $('#ModalRequisition').val(RCode);
+        //    $('#ModalItemName').val(itemId);
+        //    $('#ModalQty').val(Qty);
+        //    $('#ModalUnit').val(UnitId);
+        //    $('#ModalUnitName').val(UnitName);
+        //    $('#ModalVendor').val(Vendor);
+        //    $('#ModalQtnNo').val(TQNo);
+        //    $('#ModalQtnDate').val(TQDate);
+        //    $('#ModalUnitPrice').val(TQPrice);
+        //    $('#ModalTotal').val(TotalPrice);
+        //}
+
+
+    });
+
+    //$('#detailForm').hide(function () {
+
+    //        var TaskId = selRow.find('input[name=TaskId]').val();
+    //        var ProjectId = selRow.find('input[name=ProjectId]').val();
+    //        var ProjectName = selRow.find('input[name=ProjectName]').val();
+    //        var SiteId = selRow.find('input[name=SiteId]').val();
+    //        var SiteName = selRow.find('input[name=SiteName]').val();
+    //        var RCode = selRow.find('input[name=RCode]').val();
+    //        var itemId = selRow.find('input[name=ItemId]').val();
+    //        var Qty = selRow.find('input[name=Qty]').val();
+    //        var UnitId = selRow.find('input[name=UnitId]').val();
+    //        var UnitName = selRow.find('input[name=UnitName]').val();
+    //        var Vendor = selRow.find('input[name=Vendor]').val();
+    //        var TQNo = selRow.find('input[name=TQNo]').val();
+    //        var TQDate = selRow.find('input[name=TQDate]').val();
+    //        var TQPrice = selRow.find('input[name=TQPrice]').val();
+    //        var TotalPrice = selRow.find('input[name=TotalPrice]').val();
+
+    //        $('#ModalTaskId').val(TaskId);
+    //        $('#ModalProjectId').val(ProjectId);
+    //        $('#ModalSiteId').val(SiteId);
+    //        $('#ModalRequisition').val(RCode);
+    //        $('#ModalItemName').val(itemId);
+    //        $('#ModalQty').val(Qty);
+    //        $('#ModalUnit').val(UnitId);
+    //        $('#ModalUnitName').val(UnitName);
+    //        $('#ModalVendor').val(Vendor);
+    //        $('#ModalQtnNo').val(TQNo);
+    //        $('#ModalQtnDate').val(TQDate);
+    //        $('#ModalUnitPrice').val(TQPrice);
+    //        $('#ModalTotal').val(TotalPrice);
+        
+    //});
+
+    $('#ModalClose').click(function () {
+        $('#ModalProjectName_Error').hide();
+        $('#ModalSiteName_Error').hide();
+        $('#ModalReqNo_Error').hide();
+        $('#ModalItemName_Error').hide();
+        $('#ModalVendorName_Error').hide();
+        $('#ModalUnitPrice_Error').hide();
+        $('#ModalQtnNo_Error').hide();
+    });
+
+    $('#ModalProjectId').change(function () {
+        var id = $('#ModalProjectId option:selected').val();
+        //alert(id);
+        if ($('#ModalProjectId option:selected').text() == "--Select--") {
+            $('#ModalSiteId').empty();
+            $('#ModalRequisition').empty();
+            $('#ModalItemName').empty();
+            var sites = "<select id='sites'><option value=''>--Select--</option></select>";
+            $('#ModalSiteId').html(sites);
+            $('#ModalRequisition').html(sites);
+            $('#ModalItemName').html(sites);
+            $('#ModalUnit').val("");
+            $('#ModalUnitName').val("");
+            $('#ModalQty').val("");
+            $('#ModalVendor').val("");
+            $('#ModalQtnNo').val("");
+            $('#ModalQtnDate').val("");
+            $('#ModalUnitPrice').val("");
+            $('#ModalTotal').val("");
+        }
+        else {
+            $.ajax({
+                url: "/TenderQuotation/GetSites",
+                type: "post",
+                data: {
+                    ProjectId: id
+                },
+                dataType: "json",
+                success: function (data) {
+                    //$('#SiteId').removeAttr("disabled");
+                    var listOfSites = data.Sites.length;
+                    $('#ModalSiteId').removeAttr("disabled");
+                    $('#ModalSiteId').empty();
+                    $('#ModalRequisition').empty();
+                    $('#ModalItemName').empty();
+                    var sites = "<select id='sites'><option value=''>--Select--</option></select>";
+                    $('#ModalRequisition').html(sites);
+                    $('#ModalItemName').html(sites);
+                    $('#ModalUnit').val("");
+                    $('#ModalUnitName').val("");
+                    $('#ModalQty').val("");
+                    $('#ModalVendor').val("");
+                    $('#ModalQtnNo').val("");
+                    $('#ModalQtnDate').val("");
+                    $('#ModalUnitPrice').val("");
+                    $('#ModalTotal').val("");
+                    var sites = "<select id='ModalSiteId'>";
+                    sites = sites + '<option value="">--Select--</option>';
+                    for (var i = 0; i < listOfSites; i++) {
+                        sites = sites + '<option value=' + data.Sites[i].Value + '>' + data.Sites[i].Text + '</option>';
+                    }
+                    sites = sites + '</select>';
+                    $('#ModalSiteId').html(sites);
+
+                },
+                error: function (xhr) {
+                    alert('error');
+                }
+            });
+        }
+ 
+    });
+
+    $("#ModalSiteId").change(function () {
+        var SiteId = $('#ModalSiteId option:selected ').val();
+        var ProjectId = $('#ModalProjectId option:selected').val();
+        //alert(ProjectId);
+        if ($('#ModalSiteId option:selected ').text() == "--Select--") {
+            $('#ModalRequisition').empty();
+            $('#ModalItemName').empty();
+            var sites = "<select id='sites'><option value=''>--Select--</option></select>";
+            $('#ModalRequisition').html(sites);
+            $('#ModalItemName').html(sites);
+            $('#ModalUnit').val("");
+            $('#ModalUnitName').val("");
+            $('#ModalQty').val("");
+            $('#ModalVendor').val("");
+            $('#ModalQtnNo').val("");
+            $('#ModalQtnDate').val("");
+            $('#ModalUnitPrice').val("");
+            $('#ModalTotal').val("");
+        }
+        else {
+            $.ajax({
+                type: "post",
+                url: "/TenderQuotation/GetReqNo",
+                data: { SiteId, ProjectId },
+                datatype: "json",
+                traditional: true,
+                success: function (data) {
+                    //$('#SiteEngineer').val(data.siteEngineer);
+                    //$('#RCode').removeAttr("disabled");
+                    $('#ModalRequisition').removeAttr("disabled");
+                    $('#ModalRequisition').empty();
+                    $('#ModalItemName').empty();
+                    var sites = "<select id='sites'><option value=''>--Select--</option></select>";
+                    $('#ModalItemName').html(sites);
+                    $('#ModalUnit').val("");
+                    $('#ModalUnitName').val("");
+                    $('#ModalQty').val("");
+                    $('#ModalVendor').val("");
+                    $('#ModalQtnNo').val("");
+                    $('#ModalQtnDate').val("");
+                    $('#ModalUnitPrice').val("");
+                    $('#ModalTotal').val("");
+
+                    var listOfitems = data.Items.length;
+                    var items = "<select id='ModalRequisition'>";
+                    items = items + '<option value="">--Select--</option>';
+                    for (var i = 0; i < listOfitems; i++) {
+                        items = items + '<option value=' + data.Items[i].Value + '>' + data.Items[i].Text + '</option>';
+                    }
+                    items = items + '</select>';
+                    $('#ModalRequisition').html(items);
+                }
+
+            });
+        }
+  
+    });
+
+    $("#ModalRequisition").change(function () {
+        var Rcode = $('#ModalRequisition  option:selected').text();
+        var SiteId = $('#ModalSiteId  option:selected').val();
+        var ProjectId = $('#ModalProjectId option:selected').val();
+       
+        if ($('#ModalRequisition  option:selected').text() == "--Select--") {
+            $('#ModalItemName').empty();
+            var sites = "<select id='sites'><option value=''>--Select--</option></select>";
+            $('#ModalItemName').html(sites);
+
+            $('#ModalUnit').val("");
+            $('#ModalUnitName').val("");
+            $('#ModalQty').val("");
+            $('#ModalVendor').val("");
+            $('#ModalQtnNo').val("");
+            $('#ModalQtnDate').val("");
+            $('#ModalUnitPrice').val("");
+            $('#ModalTotal').val("");
+        }
+        else {
+            $.ajax({
+                type: "post",
+                url: "/TenderQuotation/GetReqitem",
+                data: { Rcode },
+                datatype: "json",
+                traditional: true,
+                success: function (data) {
+                    var listOfitems = data.Items.length;
+                    //alert('List: ' + listOfitems);
+                    $('#ModalItemName').empty();
+                    $('#ModalUnit').val("");
+                    $('#ModalUnitName').val("");
+                    $('#ModalQty').val("");
+                    $('#ModalVendor').val("");
+                    $('#ModalQtnNo').val("");
+                    $('#ModalQtnDate').val("");
+                    $('#ModalUnitPrice').val("");
+                    $('#ModalTotal').val("");
+                    $('#ModalItemName').removeAttr("disabled");
+
+                    var items = "<select id='ModalItemName'>";
+                    items = items + '<option value="">--Select--</option>';
+                    for (var i = 0; i < listOfitems; i++) {
+                        items = items + '<option value=' + data.Items[i].Value + '>' + data.Items[i].Text + '</option>';
+                    }
+                    items = items + '</select>';
+                    $('#ModalItemName').html(items);
+
+                }
+
+            });
+        }
+ 
+    });
+
+    $("#ModalItemName").change(function () {
+        var ItemId = $('#ModalItemName option:selected').val();
+        var Rcode = $('#ModalRequisition  option:selected').text();
+        var SiteId = $('#ModalSiteId  option:selected').val();
+
+        $.ajax({
+            type: "post",
+            url: "/TenderQuotation/GetUnit",
+            data: { ItemId, Rcode, SiteId },
+            datatype: "json",
+            traditional: true,
+            success: function (data) {
+                $('#ModalUnit').val(data.UnitId);
+                $('#ModalUnitName').val(data.UnitName);
+                $('#ModalQty').val(data.Qty);
+
+                //alert('data.Proc_RequisitionDetId' + data.Proc_RequisitionDetId);
+                $('#ModalProc_RequisitionDetId').val(data.Proc_RequisitionDetId);
+                //alert('data.Proc_RequisitionDetId after' + $('#Proc_RequisitionDetId').val());
+            }
+
+        });
+    });
+
+    $('#ModalQtnNo').change(function () {
+        var qtn = $('#ModalQtnNo').val();
+        if (qtn == "") {
+
+        }
+        else {
+            $.ajax({
+                type: "post",
+                url: "/TenderQuotation/checkQuotationNo",
+                data: { QtnNo: qtn },
+                datatype: "json",
+                traditional: true,
+                success: function (data) {
+                    if (data.flag == false) {
+                        alert(data.message);
+                        $('#ModalQtnNo').val("");
+                    }
+                }
+
+            });
+        }
+    });
+
+    $(document).on({
+        'change': function () {
+            var price = $("#ModalUnitPrice").val();
+            //var row = $(this).closest('tr');
+
+            //alert('Unit Price :' + price);
+            var quantity = $('#ModalQty').val();
+            //alert('quantity :' + quantity);
+            var totalPrice = price * quantity;
+
+            if (isNaN(totalPrice)) {
+                alert('Unit Price must be a numeric value!!')
+                //$('#TQPrice').val("");
+                //$('#TotalPrice').val("");
+            }
+            else {
+                $("#ModalTotal").val(totalPrice);
+            }
+
+
+        }
+    }, 'input[name=ModalUnitPrice]');
+
+    $('#SaveItem').click(function (e) {
+        //alert('Length:' + $('.Resource-list tr').length)
+
+        //if ($('#ProjectId option:selected').text() === "--Select--") {
+        //    alert('Please select project');
+        //    $('#ProjectId option:selected').focus();
+        //}
+        if ($.trim($('#TNo').val()) === "") {
+            alert('Tender No. required!');
+            $('#TNo').focus();
+        }
+        else if ($.trim($('#TDate').val()) === "") {
+            alert('Tender Date required!');
+            $('#TDate').focus();
+        }
+        else if ($('.Resource-list tr').length < 2) {
+            alert('Please Add Item to this Tender');
+        }
+        else {
+            //alert('All Validation Donne...');
+            CreateSitePlanTask();
+        }
+    });
+
+
+    function CreateSitePlanTask() {
+        var isValid = true;
+        //==========Master Form==========
+        var TNo = $("#TNo").val();
+        //alert('TNo: ' + TNo);
+        var TDate = $("#TDate").val();
+        //alert('TDate: ' + TDate);
+        var Specs = $("#Specs").val();
+        //alert('Specs: ' + Specs);
+        var Remarks = $("#TenderRemarks").val();
+        //alert('remarks: ' + Remarks);
+
+
+        //===========Detail Form===========
+        var Proc_RequisitionDetId = document.getElementsByName("Proc_RequisitionDetId");
+        var VendorId = document.getElementsByName("Vendor");
+        var TQDate = document.getElementsByName("TQDate");
+        var TQNo = document.getElementsByName("TQNo");
+        var TQPrice = document.getElementsByName("TQPrice");
+        var Status = document.getElementsByName("Status");
+
+        var TenderItems = [];
+        //alert($('#RequisitionDetails tr').length - 1)
+
+
+        if (TNo.trim().length > 50) {
+            isValid = false;
+            $('#TNo_Error').text("Tender No. cannot be greater than 50 characters!").show();
+        }
+        else {
+            $('#TNo_Error').hide();
+        }
+
+        if (Specs.trim().length > 100) {
+            isValid = false;
+            $('#Specs_Error').text("Specification cannot be greater than 100 characters!").show();
+        }
+        else {
+            $('#Specs_Error').hide();
+        }
+
+        if (Remarks.trim().length > 100) {
+            isValid = false;
+            $('#TenderRemarks_Error').text("Remarks cannot be greater than 100 characters!").show();
+        }
+        else {
+            $('#TenderRemarks_Error').hide();
+        }
+
+
+        if (isValid) {
+            var tableCounter = $('#RequisitionDetails tr').length - 1;
+            //alert('Length: ' + tableCounter);
+            for (var i = 0; i < tableCounter; i++) {
+                console.log(TQDate[i].value);
+            }
+
+            for (var i = 0; i < tableCounter; i++) {
+                TenderItems.push({
+                    Proc_RequisitionDetId: Proc_RequisitionDetId[i].value,
+                    VendorId: VendorId[i].value,
+                    TQDate: TQDate[i].value,
+                    TQNo: TQNo[i].value,
+                    TQPrice: TQPrice[i].value,
+                    Status: Status[i].value
+                });
+                console.log('---------->');
+                console.log('Proc_RequisitionDetId: ' + TenderItems[i].Proc_RequisitionDetId);
+                console.log('VendorId: ' + TenderItems[i].VendorId);
+                console.log('TQDate: ' + TenderItems[i].TQDate);
+                console.log('TQNo: ' + TenderItems[i].TQNo);
+                console.log('TQPrice: ' + TenderItems[i].TQPrice);
+                console.log('Status: ' + TenderItems[i].Status);
+                console.log('---------->');
+
+            }
+
+            TaskDetails = JSON.stringify({
+                TenderItems: TenderItems,
+                TNo: TNo,
+                TDate: TDate,
+                Specs: Specs,
+                Remarks: Remarks
+            });
+
+            $.ajax({
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                type: 'POST',
+                url: '/TenderQuotation/CreateTenderQuotation',
+                data: TaskDetails,
+                success: function (result) {
+                    console.log(result);
+                    if (result.flag === true) {
+                        alert("Record save successfully!");
+
+                        //$('#ProjectId').val("");
+                        //$('#SiteId').val("");
+                        //$('#RequisitionDate').val("");
+                        //$('#ReqNo').val("");
+
+                        window.location.replace("/TenderQuotation/Index");
+
+                    }
+                    else {
+                        alert(result.message);
+                    }
+                },
+                failure: function (response) {
+                    alert('error');
+                }
+            });
+        }
+
+
+    }
+
+    function RebindDatePicker() {
+        $('.datepicker').datepicker("destroy");
+        $('.datepicker').datepicker({
+            format: 'dd/mm/yyyy',
+            todayHighlight: true,
+            autoclose: true,
+            todayBtn: true,
+        });
+        // jquery validator bug fix using moment
+        //$.validator.methods.date = function (value, element) {
+        //    return this.optional(element) || moment(value, "DD/MM/YYYY", true).isValid();
+        //}
+
+    }
+
+
+    $(".delete_btn").click(function () {
+        alert("test");
+    });
+
+</script>
+
+<style>
+    span.error {
+        display: block;
+        font-style: italic;
+        color: #c12a2a;
+        font-size: 90%;
+    }
+</style>

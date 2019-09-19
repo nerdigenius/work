@@ -1,0 +1,187 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+}
+
+<div class="row">
+    <div class="col-md-10">
+        <!-- Basic layout-->
+        <div class="panel panel-flat">
+            <div class="panel-heading">
+                <h5 class="panel-title"><i class="icon-stack-plus position-left"></i> Bank Transfer Report</h5><hr />
+                <div class="heading-elements">
+                    <ul class="icons-list">
+                        <li><a data-action="collapse"></a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="panel-body">
+                @using (Html.BeginForm("BankTransferReport", "Report", FormMethod.Post, htmlAttributes: new { @target = "_blank" }))
+                {
+                    <div class="form-horizontal">
+                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                        <div class="form-group">
+
+                            <div class="form-group">
+                                @Html.Label("Company", htmlAttributes: new { @class = "control-label col-md-2" })
+                                <div class="col-md-4">
+                                    @Html.DropDownList("FromCompanyId", null, new { @class = "form-control select2" })
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                @Html.Label("Bank", htmlAttributes: new { @class = "control-label col-md-2" })
+                                <div class="col-md-4">
+                                    @Html.DropDownList("FromCompanyBankId", null, new { @class = "form-control select2" })
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                @Html.Label("Account", htmlAttributes: new { @class = "control-label col-md-2" })
+                                <div class="col-md-4">
+                                    <select name="FromBankAccount" id="FromBankAccount" class="form-control select2">
+                                        <option value="">-Select-</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                @Html.Label("FromDate", "Date From", htmlAttributes: new { @class = "control-label col-md-2" })
+                                <div class="col-md-4">
+                                    @Html.TextBox("DateFrom", null, new { @class = "form-control datepicker" })
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                @Html.Label("ToDate", "Date To", htmlAttributes: new { @class = "control-label col-md-2" })
+                                <div class="col-md-4">
+                                    @Html.TextBox("DateTo", null, new { @class = "form-control datepicker" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-md-offset-2 col-md-4">
+                            <button type="submit" class="btn btn-primary"><i class="icon-add position-left"></i>  Generate Report</button>
+                        </div>
+                    </div>
+                }
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section scripts
+{
+    @Scripts.Render("~/bundles/jqueryval")
+}
+
+<script src="~/Plugins/select2/select2.min.js"></script>
+<script>
+    $(".select2").select2();
+    $(".datepicker").attr("autocomplete", "off");
+
+    $(document).ready(function () {
+
+        var selectedCompany = getSelectedCompany();
+        setBankList(selectedCompany);
+
+        var selectedToCompany = getSelectedToCompany();
+        setBankToList(selectedToCompany);
+    });
+
+    $("#FromCompanyId").on("change", function () {
+        //var selectedCompanyID = getSelectedCompany();
+        setBankList(this.value);
+    })
+
+    $("#FromCompanyBankId").on("change", function () {
+        //var selectedBankID = getSelectedBank();
+        setAccountField(this.value);
+    })
+
+    function getSelectedCompany() {
+        var selectedCompany = $('#FromCompanyId :selected').val();
+        return selectedCompany;
+    }
+
+    function getSelectedBank() {
+        var selectedBank = $('#FromCompanyBankId :selected').val();
+        return selectedBank;
+    }
+
+    function setAccountField(selectedBankID) {
+        $.ajax({
+            type: "GET",
+            url: "/Payments/getAccountList?Id=" + selectedBankID,
+            datatype: "json",
+            success: function (accountList) {
+                $("#FromBankAccount").empty();
+                $.each(accountList, function (index, item) {
+                    $("#FromBankAccount").append($('<option></option>').val(item.AccountNo).text(item.AccountName + " (" + item.AccountNo + ")"));
+                })
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                alert('Error: ' + textStatus + ' - ' + errorThrown);
+            }
+        });
+    }
+
+    function setBankList(selectedCompanyID) {
+        $.ajax({
+            type: "GET",
+            url: "/Payments/getBankListByCompanyID?Id=" + selectedCompanyID,
+            datatype: "json",
+            success: function (bankList) {
+
+                if (!bankList.length <= 0) {
+
+                    $("#FromCompanyBankId").empty();
+                    $.each(bankList, function (index, item) {
+                        $("#FromCompanyBankId").append($('<option></option>').val(item.Id).text(item.Name));
+                    })
+
+                    var selectedBankID = $("#FromCompanyBankId").val();
+                    if (selectedBankID != null && selectedBankID !== undefined) {
+                        setAccountField(selectedBankID);
+                    } else {
+                        $("#FromBankAccount").empty();
+                        $("#FromBankAccount").append($('<option></option>').val("").text("No Bank Selected"));
+                    }
+                } else {
+                    $("#FromCompanyBankId").empty();
+                    $("#FromCompanyBankId").append($('<option></option>').val("").text("No Bank Found"));
+
+                    $("#FromBankAccount").empty();
+                    $("#FromBankAccount").append($('<option></option>').val("").text("No Bank Selected"));
+                }
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                alert('Error: ' + textStatus + ' - ' + errorThrown);
+            }
+        });
+    }
+
+    $("form").submit(function (e) {
+
+        if ($("#FromCompanyId").val() == "") {
+            alert("Please select a company");
+            e.preventDefault();
+        }
+
+        if ($("#FromCompanyBankId").val() == "") {
+            alert("Please select a from bank");
+            e.preventDefault();
+        }
+
+        if ($("#FromBankAccount").val() == "") {
+            alert("Please select a from bank account");
+            e.preventDefault();
+        }
+    });
+</script>

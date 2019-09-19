@@ -1,0 +1,178 @@
+﻿@model IEnumerable<ERP.ViewModels.VMVendorLedgerReport>
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+}
+
+
+<div class="row">
+    <div class="col-md-10">
+        <!-- Basic layout-->
+        <div class="panel panel-flat">
+            <div class="panel-heading">
+                <h5 class="panel-title"><i class="icon-stack-plus position-left"></i> Vendor Retailer Report</h5><hr />
+                <div class="heading-elements">
+                    <ul class="icons-list">
+                        <li><a data-action="collapse"></a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="panel-body">
+                @using (Html.BeginForm("VendorCommissionReport", "Report", FormMethod.Post, htmlAttributes: new { @target = "_blank" }))
+                {
+                    <div class="form-horizontal">
+                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                        <div class="form-group">
+
+                            <!--New-->
+
+                            <div class="form-group">
+                                @Html.Label("Company", htmlAttributes: new { @class = "control-label col-md-2" })
+                                <div class="col-md-4">
+
+                                    @Html.DropDownList("CompanyId", null, "--Select--", new { @class = "form-control select2", @Id = "ProjectId" })
+
+
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                @Html.Label("Vendor", htmlAttributes: new { @class = "control-label col-md-2" })
+                                <div class="col-md-4">
+                                    @Html.DropDownList("UserMasId", null, "--Select--", new { @class = "form-control select2", @Id = "ProjectId" })
+
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                @Html.Label("ProductCategoryId", "Product Category", htmlAttributes: new { @class = "control-label col-md-2" })
+                                <div class="col-md-4">
+
+                                    @Html.DropDownList("ProductCategoryId", null, "--Select--", new { @class = "form-control select2" })
+
+
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                @Html.Label("Item", htmlAttributes: new { @class = "control-label col-md-2" })
+                                <div class="col-md-4">
+
+                                    @Html.DropDownList("ItemId", null, "--Select--", new { @class = "form-control select2" })
+
+
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                @Html.Label("FromDate", "Date From", htmlAttributes: new { @class = "control-label col-md-2" })
+                                <div class="col-md-4">
+                                    @Html.TextBox("DateFrom", null, new { @class = "form-control datepicker" })
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                @Html.Label("ToDate", "Date To", htmlAttributes: new { @class = "control-label col-md-2" })
+                                <div class="col-md-4">
+                                    @Html.TextBox("DateTo", null, new { @class = "form-control datepicker" })
+                                </div>
+                            </div>
+
+                        </div>
+
+
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-md-offset-2 col-md-4">
+                            <button type="submit" class="btn btn-primary"><i class="icon-add position-left"></i>  Generate Report</button>
+                        </div>
+                    </div>
+                }
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section scripts
+{
+    @Scripts.Render("~/bundles/jqueryval")
+
+    <script src="~/Plugins/select2/select2.min.js"></script>
+    <script>
+        $(".select2").select2();
+        $(".datepicker").attr("autocomplete", "off");
+
+
+        $('#UserMasId').change(function () {
+
+            var id = $('#UserMasId option:selected').val();
+
+            $.ajax({
+                url: "/Report/GetCategoryByUser",
+                type: "post",
+                data: {
+                    UserMasId: id
+                },
+                dataType: "json",
+                success: function (data) {
+                    //$('#SiteId').removeAttr("disabled");
+
+                    var listOfSites = data.length;
+
+                    var sites = "<select id='sites'>";
+                    sites = sites + '<option value="">--Select--</option>';
+                    for (var i = 0; i < listOfSites; i++) {
+                        sites = sites + '<option value=' + data[i].Value + '>' + data[i].Text + '</option>';
+                    }
+                    sites = sites + '</select>';
+                    $('#ProductCategoryId').html(sites);
+
+                },
+                error: function (xhr) {
+                    alert('error');
+                }
+            });
+        });
+
+
+        $('#ProductCategoryId').change(function () {
+
+            var id = $('#ProductCategoryId option:selected').val();
+
+            $.ajax({
+                url: "/ProductCategories/GetItemsUnderCat",
+                type: "post",
+                data: {
+                    ProductCategoryId: id
+                },
+                dataType: "json",
+                success: function (data) {
+                    //$('#SiteId').removeAttr("disabled");
+
+                    var listOfSites = data.length;
+
+                    var sites = "<select id='sites'>";
+                    sites = sites + '<option value="">--Select--</option>';
+                    for (var i = 0; i < listOfSites; i++) {
+                        sites = sites + '<option value=' + data[i].Value + '>' + data[i].Text + '</option>';
+                    }
+                    sites = sites + '</select>';
+                    $('#ItemId').html(sites);
+
+                },
+                error: function (xhr) {
+                    alert('error');
+                }
+            });
+        });
+
+
+    </script>
+
+}
+
+
+

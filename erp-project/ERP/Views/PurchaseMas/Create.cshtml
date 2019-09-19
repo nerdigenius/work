@@ -1,0 +1,467 @@
+﻿@model ERP.Models.PurchaseMas
+
+
+
+
+@{
+    ViewBag.Title = "Purchase Module";
+    ViewBag.SubTitle = "Create";
+}
+
+<div class="panel panel-primary panel-bordered">
+    <div class="panel-heading">
+        <h5 class="panel-title">Cash Adjustment From Factory</h5>
+    </div>
+    <div class="panel-body">
+
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+
+            <div class="form-horizontal">
+                <h4>PurchaseMas</h4>
+                <hr />
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                <div class="form-group">
+                    @Html.LabelFor(model => model.UserRoleId, "UserRoleId", htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.DropDownList("UserRoleId", null, htmlAttributes: new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.UserRoleId, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.AgreementsId, "AgreementsId", htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.DropDownList("AgreementsId", null, htmlAttributes: new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.AgreementsId, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.OrderDate, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.OrderDate, new { htmlAttributes = new { @class = "form-control datepicker" } })
+                        @Html.ValidationMessageFor(model => model.OrderDate, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.VendorRef, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.VendorRef, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.VendorRef, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Status, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.Status, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Status, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Type, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.Type, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Type, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+
+            </div>
+        }
+
+        <div class="table-responsive">
+            <table class="table table-bordered table-xxs FactoryCashAdjustmentTable" id="FactoryCashAdjustment">
+                <thead>
+                    <tr class="bg-primary-400">
+                        <th style="min-width:150px;">Product Category</th>
+                        <th style="min-width:150px;">Item</th>
+                        <th style="min-width:150px;">Location</th>
+                        <th style="min-width:150px;">Transport</th>
+                        <th style="min-width:50px;">Schedule Date</th>
+                        <th style="min-width:50px;">Quantity</th>
+                        <th style="min-width:50px;">Tax</th>
+                        <th style="min-width:50px;"></th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+                <tfoot>
+                    <tr>
+                        <td><button type="button" class="btn btn-default btn-rounded btn-xs" id="btnAddRow"><i class="icon-add position-left"></i> Add Row</button> </td>
+                        <td></td>
+                    </tr>
+
+
+                </tfoot>
+            </table>
+        </div>
+
+
+    </div>
+
+</div>
+
+<div class="panel panel-primary panel-bordered">
+    <div class="panel-body">
+        <div class="form-group">
+            <div class="col-md-12">
+                <button type="button" class="btn btn-success" id="saveState">Save <i class="icon-arrow-right14 position-right"></i></button>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div>
+    @Html.ActionLink("Back to List", "Index", null, new { @class = "btn btn-default" })
+</div>
+
+
+
+
+@section Scripts {
+
+    @Scripts.Render("~/bundles/jqueryval")
+
+    <script type="text/javascript">
+
+        var cnOrderTempId = 0;
+        var currSelDelivRow = 0;
+
+
+        function RebindDatePicker() {
+            $('.datepicker').datepicker("destroy");
+            $('.datepicker').datepicker({
+                format: 'dd/mm/yyyy',
+                todayHighlight: true,
+                todayBtn: true,
+                autoclose: true
+            });
+
+        }
+
+
+
+        $(document).ready(function () {
+            $(".select2").select2();
+
+            $('.datepicker').datepicker({
+                format: 'dd/mm/yyyy',
+                todayHighlight: true,
+                todayBtn: true,
+                autoclose: true
+            });
+
+            // jquery validator bug fix using moment
+            $.validator.methods.date = function (value, element) {
+                return this.optional(element) || moment(value, "DD/MM/YYYY", true).isValid();
+            }
+
+
+            //$('#FactoryCahsAdjustment').on('change', '.FacAdjustAmount', function () {
+            //    if ($.isNumeric($(this).val()) == false) {
+            //        $(this).val('');
+            //        alert('Only numeric allowed');
+            //    }
+            //   // PopulateTotalValue();
+            //});
+
+            AddNewRow();
+
+
+
+
+        });
+
+
+        $('#btnAddRow').click(function () {
+
+            AddNewRow();
+        });
+
+
+
+
+
+        function AddNewRow() {
+            cnOrderTempId++;
+            //debugger;
+            var newRow = jQuery('<tr><td>'
+                + '<input type="hidden" name = "TempOrderId" value="' + cnOrderTempId + '" class="TempOrderId" />'
+                + '<select name="ProductCatId" class="ProductCatId form-control select2 input-xs"><option value=""></option></select></td>'
+                + '<td><select name="ItemId" class="ItemId form-control select2 input-xs"><option value=""></option></select></td>'
+                + '<td><select name="LocationId" class="LocationId form-control select2 input-xs"><option value=""></option></select></td>'
+                + '<td><select name="TransportId" class="TransportId form-control select2 input-xs"><option value=""></option></select></td>'
+                + '<td><input type="text" name="ScheduleDate" class="ScheduleDate form-control datepicker input-xs" /></td>'
+                + '<td><input type="text" name="Quantity" class="Quantity form-control input-xs" /></td>'
+                + '<td><input type="text" name="Tax" class="Tax form-control input-xs" /></td>'
+
+                + '<td><button onclick="RemoveOrderRow(this)" type="button" class="btn  text-warning-600 btn-flat btn-icon btn-rounded"><i class="icon-cross"></i></button></td></tr>');
+
+            //jQuery('table.FactoryCashAdjustmentTable tbody').find('tr:last').before(newRow);
+            jQuery('table.FactoryCashAdjustmentTable tbody').append(newRow);
+
+            $(".select2").select2();
+
+            RebindDatePicker();
+
+
+
+            $.ajax({
+                type: "post",
+                url: "/ProductCategories/GetProductCat",
+                //data: { Id: selectedDeptValue },
+                datatype: "json",
+                traditional: true,
+                success: function (data) {
+
+                    //$('.SupplierId').empty();
+                    $('.ProductCatId').append('<option value=""></option>');
+                    $.each(data, function (index, item) {
+                        $('.ProductCatId').append($('<option></option>').val(item.Id).text(item.Name));
+                    })
+                    //BindProductCategory();
+                }
+            });
+
+            $.ajax({
+                type: "post",
+                url: "/Items/GetItems",
+                //data: { Id: selectedDeptValue },
+                datatype: "json",
+                traditional: true,
+                success: function (data) {
+
+                    //$('.SupplierId').empty();
+                    $('.ItemId').append('<option value=""></option>');
+                    $.each(data, function (index, item) {
+                        $('.ItemId').append($('<option></option>').val(item.Id).text(item.Name));
+                    })
+                    //BindProductCategory();
+                }
+            });
+
+
+            $.ajax({
+                type: "post",
+                url: "/Locations/GetLocation",
+                //data: { Id: selectedDeptValue },
+                datatype: "json",
+                traditional: true,
+                success: function (data) {
+
+                    //$('.SupplierId').empty();
+                    $('.LocationId').append('<option value=""></option>');
+                    $.each(data, function (index, item) {
+                        $('.LocationId').append($('<option></option>').val(item.Id).text(item.Name));
+                    })
+                    //BindProductCategory();
+                }
+            });
+
+
+            $.ajax({
+                type: "post",
+                url: "/Locations/GetLocation",
+                //data: { Id: selectedDeptValue },
+                datatype: "json",
+                traditional: true,
+                success: function (data) {
+
+                    //$('.SupplierId').empty();
+                    $('.LocationId').append('<option value=""></option>');
+                    $.each(data, function (index, item) {
+                        $('.LocationId').append($('<option></option>').val(item.Id).text(item.Name));
+                    })
+                    //BindProductCategory();
+                }
+            });
+
+
+
+            $.ajax({
+                type: "post",
+                url: "/Transports/GetTransport",
+                //data: { Id: selectedDeptValue },
+                datatype: "json",
+                traditional: true,
+                success: function (data) {
+
+                    //$('.SupplierId').empty();
+                    $('.TransportId').append('<option value=""></option>');
+                    $.each(data, function (index, item) {
+                        $('.TransportId').append($('<option></option>').val(item.Id).text(item.Name));
+                    })
+                    //BindProductCategory();
+                }
+            });
+        }
+
+        function RemoveOrderRow(e) {
+
+            //alert($('#FactoryCashAdjustment tr').length);
+            //debugger;
+            if ($('#FactoryCashAdjustment tr').length == 3) {
+                alert('You cannot delete this row.\nOrder requires atleast one record.');
+                return;
+            }
+
+            if (confirm('Do you really want to delete?') == false) {
+                return;
+            }
+
+            $('#FactoryCashAdjustment tr').eq(currSelDelivRow).removeClass("bg-brown");
+
+            //var currRowIndex = $(e).closest('tr').index() + 1;
+
+            //var id = $('#FactoryCashAdjustment tr').eq(currRowIndex).find("input.TempOrderId").val();
+
+            $(e).parent().parent().remove();
+        }
+
+
+        $('#saveState').click(function () {
+
+            if (CheckOrderGridData() == false) {
+
+            }
+            else {
+                SaveOrderData();
+            }
+            // SaveOrderData();
+
+
+        });
+
+
+        function CheckOrderGridData() {
+            // ProdCatId ProdTypeId styleNo unitPrice itemQnty factoryId
+
+            var totRow = $('#FactoryCashAdjustment tr').length;
+            //alert(totRow);
+            for (var i = 1; i <= totRow; i++) {
+                if ($('#FactoryCashAdjustment tr').eq(i).find(".SupplierId").val() == "") {
+                    alert('Supplier required');
+                    return false;
+                };
+
+                if ($('#FactoryCashAdjustment tr').eq(i).find(".FacAdjustDate").val() == "") {
+                    alert('Adjustment Date required');
+                    return false;
+                };
+
+                if ($('#FactoryCashAdjustment tr').eq(i).find(".FacAdjustAmount").val() == "") {
+                    alert('Adjustment Amount required');
+                    return false;
+                };
+
+            }
+
+            return true;
+        }
+
+        + '<input type="hidden" name = "TempOrderId" value="' + cnOrderTempId + '" class="TempOrderId" />'
+            + '<select name="ProductCatId" class="ProductCatId form-control select2 input-xs"><option value=""></option></select></td>'
+            + '<td><select name="ItemId" class="ItemId form-control select2 input-xs"><option value=""></option></select></td>'
+            + '<td><select name="LocationId" class="LocationId form-control select2 input-xs"><option value=""></option></select></td>'
+            + '<td><select name="TransportId" class="TransportId form-control select2 input-xs"><option value=""></option></select></td>'
+            + '<td><input type="text" name="ScheduleDate" class="ScheduleDate form-control datepicker input-xs" /></td>'
+            + '<td><input type="text" name="Quantity" class="Quantity form-control input-xs" /></td>'
+            + '<td><input type="text" name="Tax" class="Tax form-control input-xs" /></td>'
+
+        function SaveOrderData() {
+
+            $("#saveState").attr("disabled", "disabled");
+
+            var TempOrderId = document.getElementsByName("TempOrderId");
+
+            var UserRoleId = $('#UserRoleId').val();
+
+            var AgreementsId = $('#AgreementsId').val();
+
+            var OrderDate = $('#OrderDate').val();
+
+            var VendorRef = $('#VendorRef').val();
+
+            var Status = $('#Status').val();
+
+            var Type = $('#Type').val();
+
+
+
+            var ProductCatId = document.getElementsByName("ProductCatId");
+            var ItemId = document.getElementsByName("ItemId");
+            var LocationId = document.getElementsByName("LocationId");
+            var TransportId = document.getElementsByName("TransportId");
+            var ScheduleDate = document.getElementsByName("ScheduleDate");
+
+            var Quantity = document.getElementsByName("Quantity");
+            var Tax = document.getElementsByName("Tax");
+
+
+
+            //return;
+            var OItems = [];
+
+            for (var i = 0; i < ProductCatId.length; i++) {
+                OItems.push({
+                    TempOrderDetId: TempOrderId[i].value,
+                    Id: 0,
+                    ProductCategoryId: ProductCatId[i].value,
+                    ItemId: ItemId[i].value,
+                    LocationId: LocationId[i].value,
+                    TransportId: TransportId[i].value,
+                    ScheduleDate: ScheduleDate[i].value,
+                    Quantity: Quantity[i].value,
+                    Tax: Tax[i].value
+
+                });
+                console.log(OItems[i]);
+            }
+
+
+
+            OrderDetails = JSON.stringify({
+                OrderDetails: OItems,
+                UserRoleId: UserRoleId,
+                AgreementsId: AgreementsId,
+                OrderDate: OrderDate,
+                VendorRef: VendorRef,
+                Status: Status,
+                Type: Type
+
+            });
+
+            $.ajax({
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                type: 'POST',
+                url: '/PurchaseMas/SavePurchaseOrder',
+                data: OrderDetails,
+                success: function (result) {
+                    console.log(result);
+                    $("#saveState").removeAttr("disabled");
+                    if (result.flag == true) {
+                        //alert("Record save successfully!");
+                        window.location = "/PurchaseMas/Index/";
+                    }
+                    else {
+                        alert(result.message);
+                    }
+
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    alert('Error: ' + textStatus + ' - ' + errorThrown);
+                    $("#saveState").removeAttr("disabled");
+                }
+            });
+
+        }
+
+    </script>
+
+}

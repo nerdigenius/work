@@ -1,0 +1,10 @@
+.git/
+.vs/
+ERP/obj/
+ERP/bin/
+ERP/Migrations/
+ERP/Web.config
+ERP/Web.Debug.config
+ERP/Web.Release.config
+
+

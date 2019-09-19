@@ -1,0 +1,98 @@
+﻿@model ERP.Models.Payment
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Payment</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Company.Address)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Company.Address)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.TransactionMode.Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TransactionMode.Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.UserMas.Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.UserMas.Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.VendorBankAccount.Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.VendorBankAccount.Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.TransactionType)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TransactionType)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Amount)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Amount)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CompanyBankId)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CompanyBankId)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CheckNo)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CheckNo)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CheckIssueDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CheckIssueDate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CheckPassingDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CheckPassingDate)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

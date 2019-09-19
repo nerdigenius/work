@@ -1,0 +1,32 @@
+﻿.card {
+    background: #fff;
+    padding: 20px;
+    border-radius: 3px;
+    border: 1px solid #ccc;
+    -webkit-box-shadow: -2px 7px 4px -9px rgba(0,0,0,0.75);
+    -moz-box-shadow: -2px 7px 4px -9px rgba(0,0,0,0.75);
+    box-shadow: -2px 7px 4px -9px rgba(0,0,0,0.75);
+}
+
+.red-top {
+    border-top: 3px solid red;
+}
+
+.blue-top {
+    border-top: 3px solid #2196F3;
+}
+
+.green-top {
+    border-top: 3px solid green;
+}
+
+.orange-top {
+    border-top: 3px solid orange;
+}
+
+.card-header {
+    padding: 0 0 12px 0;
+    border-bottom: 1px solid #eaeaea;
+    font-size: 1.2em;
+    margin-bottom: 22px;
+}

@@ -1,0 +1,648 @@
+﻿@model ERP.Models.UserMas
+@*@model ERP.ViewModels.VMVendorRetailerDet*@
+
+@{
+    ViewBag.Title = "Edit";
+}
+
+
+
+
+
+
+<div class="card green-top">
+    <h2>Edit</h2>
+    <h5>Retailer</h5>
+</div>
+
+<br />
+
+
+<div class="panel-body">
+
+    @using (Html.BeginForm())
+    {
+
+        @Html.AntiForgeryToken()
+
+        <div class="form-horizontal">
+            @Html.HiddenFor(model => model.Id)
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="card blue-top">
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.Name, "Name", htmlAttributes: new { @class = "control-label col-md-2" })
+                            <div class="col-md-10">
+                                @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.InitialBalance, "Initial Balance", htmlAttributes: new { @class = "control-label col-md-2" })
+                            <div class="col-md-10">
+                                @Html.EditorFor(model => model.InitialBalance, new { htmlAttributes = new { @class = "form-control", @disabled="true" } })
+                                @Html.ValidationMessageFor(model => model.InitialBalance, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.Phone, "Phone", htmlAttributes: new { @class = "control-label col-md-2" })
+                            <div class="col-md-10">
+                                @Html.EditorFor(model => model.Phone, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.Phone, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.EmployeeId, "Sales Person", htmlAttributes: new { @class = "control-label col-md-2" })
+                            <div class="col-md-10">
+                                @Html.DropDownList("EmployeeId", null, "", htmlAttributes: new { @class = "form-control" })
+                                @Html.ValidationMessageFor(model => model.EmployeeId, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="card blue-top">
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.Email, htmlAttributes: new { @class = "control-label col-md-2" })
+                            <div class="col-md-10">
+                                @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.ContactPerson, "Contact Person", htmlAttributes: new { @class = "control-label col-md-2" })
+                            <div class="col-md-10">
+                                @Html.EditorFor(model => model.ContactPerson, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.ContactPerson, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <br />
+
+
+
+        </div>
+
+    }
+
+
+    <div class="table-responsive card blue-top">
+        <table class="table table-bordered table-xxs VendorRetailerDetailsTable" id="VendorRetailerDetails">
+            <thead>
+                <tr class="bg-primary-400">
+                    <th style="min-width:150px;">Product Category</th>
+                    <th style="min-width:150px;">Item</th>
+                    <th style="min-width:150px;">Unit Price</th>
+                    <th style="min-width:150px;">Location</th>
+                    <th style="min-width:50px;">Carrying Cost</th>
+                    <th style="min-width:50px;"></th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+            <tfoot>
+                <tr>
+                    <td><button type="button" class="btn btn-default btn-rounded btn-xs" id="btnAddRow"><i class="icon-add position-left"></i> Add Row</button> </td>
+                    <td></td>
+                </tr>
+
+
+            </tfoot>
+        </table>
+    </div>
+
+    @*<div class="row">
+            <div class="form-group">
+                <div class="col-md-10">
+                    <input type="submit" value="Create" class="btn btn-primary" />
+                    <button type="button" class="btn btn-danger" onclick="window.location.href='@Url.Action("Index")';">Cancel</button>
+
+
+                </div>
+            </div>
+        </div>*@
+
+
+    <div class="panel panel-primary panel-bordered">
+        <div class="panel-body">
+            <div class="form-group">
+                <div class="col-md-12">
+                    <button type="button" class="btn btn-primary" id="saveState">Save <i class="icon-arrow-right14 position-right"></i></button>
+                    @*<input type="submit" value="Save" class="btn btn-primary" />*@
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+
+    <script type="text/javascript">
+
+        var cnOrderTempId = 0;
+        //var currSelDelivRow = 0;
+        var deletedItems = [];
+
+
+        //function RebindDatePicker() {
+        //    $('.datepicker').datepicker("destroy");
+        //    $('.datepicker').datepicker({
+        //        format: 'dd/mm/yyyy',
+        //        todayHighlight: true,
+        //        todayBtn: true,
+        //        autoclose: true
+        //    });
+
+        //}
+
+
+
+        $(document).ready(function () {
+            $(".select2").select2();
+            LoadSavedData();
+            //AddNewRow();
+        });
+
+        function LoadSavedData() {
+
+            var Id = $('#Id').val();
+
+            //SetFabricInfo();
+
+            $.ajax({
+                type: "post",
+                url: "/ProductCategories/GetProductCat",
+                datatype: "json",
+                traditional: true,
+                success: function (catList) {
+                    console.log(catList)
+                    $.ajax({
+                        type: 'POST',
+                        url: '/VendorRetailer/GetDetailData/',
+                        data: { Id: Id },
+                        dataType: 'json',
+                        //async: false,
+                        success: function (data) {
+
+                            for (var i = 0; i < data.length; i++) {
+                                cnOrderTempId++;
+
+                                var row =
+                                    $('<tr><td><input type="hidden" name="UserDetVendorId" value="' + data[i].Id + '" class="UserDetVendorId" /><input type="hidden" name="VendorRetailerId" value="' + data[i].VendorRetailerId + '" class="VendorRetailerId" />'
+                                        + '<input type="hidden" name = "TempOrderId" value="' + cnOrderTempId + '" class="TempOrderId" />'
+                                        + '<select name="ProductCatId" id="current-product-row-' + cnOrderTempId + '" class="ProductCatId form-control select2 input-xs"><option value=""></option></select></td>'
+                                        + '<td><select name="ItemId" id="current-item-row-' + cnOrderTempId + '" class="ItemId form-control select2 input-xs relatedItem-' + cnOrderTempId + '"><option value=""></option></select></td>'
+                                        + '<td><input type="text" name="UnitPrice" class="UnitPrice form-control input-xs" value="' + data[i].UnitPrice + '" /></td>'
+                                        + '<td><select name="LocationId" id="current-location-row-' + cnOrderTempId + '" class="LocationId form-control select2 input-x"><option value=""></option></select></td>'
+
+                                        //+ '<td><input type="hidden" name="LocationId" value="' + data[i].LocationId + '" class="LocationId" /><input type="text" name="LocationName" value="' + data[i].LocationName + '" class="LocationName form-control input-xs text-right" /></td>'
+                                        + '<td><input type="text" name="CarryingCost" value="' + data[i].CarryingCost + '" class="CarryingCost form-control input-xs text-right" /></td>'
+                                        + '<td><button onclick="RemoveOrderRow(this)" type="button" class="btn  text-warning-600 btn-flat btn-icon btn-rounded"><i class="icon-cross"></i></button></td></tr>');
+
+                                $('table.VendorRetailerDetailsTable tbody').append(row);
+
+                                var currRow = $('table.VendorRetailerDetailsTable tbody').find('tr:last').index() + 1;
+                                //$('table.VendorRetailerDetailsTable tbody').find('tr:last').before(row);
+                                //console.log(cnOrderTempId);
+                                //console.log("ccccc", $('#current-product-row-' + cnOrderTempId));
+
+
+                                //var prodCatId = $('#current-product-row-' + cnOrderTempId);
+
+                                //BindProductCategory(prodCatId);
+
+
+                                $('#current-product-row-' + cnOrderTempId).on('change', function () {
+                                    var currentProductID = $(this).attr('id');
+
+                                    var matches = currentProductID.match(/\d+/g);
+                                    matches = matches[0];
+
+                                    console.log(currentProductID);
+                                    $.ajax({
+                                        type: "GET",
+                                        url: "/ProductCategories/GetItemsUnderCategory?Id=" + this.value,
+                                        //data: { Id: this.value },
+                                        datatype: "json",
+                                        traditional: true,
+                                        success: function (productItemsList) {
+                                            //console.log("zzzzzzz", productItemsList);
+                                            $(".relatedItem-" + matches).empty();
+                                            $.each(productItemsList, function (index, item) {
+                                                $(".relatedItem-" + matches).append($('<option></option>').val(item.Id).text(item.Name));
+                                            })
+                                        },
+                                        error: function (jqXHR, textStatus, errorThrown) {
+                                            alert('Error: ' + textStatus + ' - ' + errorThrown);
+                                        }
+                                    });
+                                });
+
+                                $.each(catList.prodCatList, function (index, item) {
+                                    if (item.Id == data[i].ProductCategoryId) {
+                                        $('#current-product-row-' + cnOrderTempId).append($('<option selected></option>').val(item.Id).text(item.Name));
+                                    } else {
+                                        $('#current-product-row-' + cnOrderTempId).append($('<option></option>').val(item.Id).text(item.Name));
+                                    }
+                                });
+
+                                var currentRowProductID = $('#current-product-row-' + cnOrderTempId).find(":selected").val();
+                                //console.log(currentRowProductID);
+
+
+
+                                $.each(catList.prodCatWiseItemList, function (index, item) {
+
+                                    if (item.ProductCategoryId == currentRowProductID) {
+                                        if (item.Id == data[i].ItemId) {
+                                            $('#current-item-row-' + cnOrderTempId).append($('<option selected></option>').val(item.Id).text(item.Name));
+                                        } else {
+                                            $('#current-item-row-' + cnOrderTempId).append($('<option></option>').val(item.Id).text(item.Name));
+                                        }
+                                    }
+                                })
+
+                                $.each(catList.locationList, function (index, item) {
+                                    console.log(item);
+                                    if (item.Id == data[i].LocationId) {
+                                        $('#current-location-row-' + cnOrderTempId).append($('<option selected></option>').val(item.Id).text(item.Name));
+                                    } else {
+                                        $('#current-location-row-' + cnOrderTempId).append($('<option></option>').val(item.Id).text(item.Name));
+                                    }
+
+                                })
+
+                                //SetCategory(currRow, data[i].ProductCategoryId);
+                            }
+                            //BindProductCategory2();
+                            $(".select2").select2();
+                            //AddNewRow();
+                        },
+                        error: function (jqXHR, textStatus, errorThrown) {
+                            alert('Error: ' + textStatus + ' - ' + errorThrown);
+                        }
+                    });
+                }
+            });
+        }
+
+
+        function BindProductCategory(prodCatId) {
+            console.log('test', prodCatId);
+            var currentProductID = prodCatId.attr('id');
+            console.log('currentProductID', currentProductID);
+
+            var matches = currentProductID.match(/\d+/g);
+            matches = matches[0];
+
+            console.log(matches);
+            $.ajax({
+                type: "GET",
+                url: "/ProductCategories/GetItemsUnderCategory?Id=" + this.value,
+                //data: { Id: this.value },
+                datatype: "json",
+                traditional: true,
+                success: function (productItemsList) {
+                    $(".relatedItem-" + matches).empty();
+                    $.each(productItemsList, function (index, item) {
+                        $(".relatedItem-" + matches).append($('<option></option>').val(item.Id).text(item.Name));
+                    })
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    alert('Error: ' + textStatus + ' - ' + errorThrown);
+                }
+            });
+        }
+
+
+        //function SetCategory(currRow, selCatVal) {
+        //    //alert(currRow + ", " + selCatVal);
+        //    var selectedValue = $('#Id').val();
+
+        //    $.ajax({
+        //        type: "post",
+        //        url: "/VendorRetailer/GetProductCategoryNames",
+        //        datatype: "json",
+        //        data: { Id: selectedValue },
+        //        traditional: true,
+        //        success: function (data) {
+
+        //            var selOptions = "<select>";
+        //            //selOptions = selOptions + '<option value=""></option>';
+        //            for (var i = 0; i < data.length; i++) {
+        //                selOptions = selOptions + '<option value=' + data[i].Id + '>' + data[i].Name + '</option>';
+        //            }
+
+        //            //alert(selOptions);
+        //            selOptions = selOptions + '</select>';
+        //            jQuery('table.VendorRetailerDetailsTable tr').eq(currRow).find("td:eq(0) select.ProductCatId").html(selOptions);
+        //            jQuery('table.VendorRetailerDetailsTable tr').eq(currRow).find("td:eq(0) select.ProductCatId").val(selCatVal);
+
+        //        }
+        //    });
+        //}
+
+        $('#btnAddRow').click(function () {
+
+            //$('.ProductCatId').empty();
+            //$('.ItemId').empty();
+            // $('.LocationId').empty();
+
+            AddNewRow();
+        });
+
+        function AddNewRow() {
+            cnOrderTempId++;
+            //debugger;
+            var newRow = jQuery('<tr><td>'
+                + '<input type="hidden" name="UserDetVendorId" value="0" class="UserDetVendorId" /><input type="hidden" name = "TempOrderId" value="' + cnOrderTempId + '" class="TempOrderId" />'
+                + '<select name="ProductCatId" id="current-product-row-' + cnOrderTempId + '" class="ProductCatId form-control select2 input-xs"><option value=""></option></select></td>'
+                + '<td><input type="hidden" name="VendorRetailerId" value="0" class="VendorRetailerId" /><select name="ItemId" id="current-item-row-' + cnOrderTempId + '" class="ItemId form-control select2 input-xs relatedItem-' + cnOrderTempId + '"><option value=""></option></select></td>'
+                + '<td><input type="text" name="UnitPrice" class="UnitPrice form-control input-xs" /></td>'
+                + '<td><select name="LocationId" id="current-location-row-' + cnOrderTempId + '" class="LocationId form-control select2 input-xs"><option value=""></option></select></td>'
+                //+ '<td><input type="hidden" name="LocationId" value="0" class="LocationId" /><input type="text" name="LocationName" class="LocationName form-control input-xs" /></td>'
+                + '<td><input type="text" name="CarryingCost" class="CarryingCost form-control input-xs" /></td>'
+                + '<td><button onclick="RemoveOrderRow(this)" type="button" class="btn  text-warning-600 btn-flat btn-icon btn-rounded"><i class="icon-cross"></i></button></td></tr>');
+
+            //jQuery('table.FactoryCashAdjustmentTable tbody').find('tr:last').before(newRow);
+            jQuery('table.VendorRetailerDetailsTable tbody').append(newRow);
+
+            $(".select2").select2();
+
+
+            $('#current-product-row-' + cnOrderTempId).on('change', function () {
+                var currentProductID = $(this).attr('id');
+
+                var matches = currentProductID.match(/\d+/g);
+                matches = matches[0];
+
+                console.log(currentProductID);
+                $.ajax({
+                    type: "GET",
+                    url: "/ProductCategories/GetItemsUnderCategory?Id=" + this.value,
+                    //data: { Id: this.value },
+                    datatype: "json",
+                    traditional: true,
+                    success: function (productItemsList) {
+                        $(".relatedItem-" + matches).empty();
+                        $.each(productItemsList, function (index, item) {
+                            $(".relatedItem-" + matches).append($('<option></option>').val(item.Id).text(item.Name));
+                        })
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        alert('Error: ' + textStatus + ' - ' + errorThrown);
+                    }
+                });
+            });
+
+
+
+            $.ajax({
+                type: "post",
+                url: "/ProductCategories/GetProductCat",
+                //data: { Id: selectedDeptValue },
+                datatype: "json",
+                traditional: true,
+                success: function (data) {
+                    console.log('test data', data.prodCatList);
+                    //$('.SupplierId').empty();
+                    //$('.ProductCatId').append('<option value=""></option>');
+                    $.each(data.prodCatList, function (index, item) {
+                        //console.log(item.Name);
+                        $('#current-product-row-' + cnOrderTempId).append($('<option></option>').val(item.Id).text(item.Name));
+                    })
+
+
+
+
+                    $.each(data.prodCatWiseItemList, function (index, item) {
+                        //console.log(item.Name);
+                        $('#current-item-row-' + cnOrderTempId).append($('<option></option>').val(item.Id).text(item.Name));
+                    })
+                    //BindProductCategory();
+                }
+            });
+
+            //$.ajax({
+            //    type: "post",
+            //    url: "/Items/GetItems",
+            //    //data: { Id: selectedDeptValue },
+            //    datatype: "json",
+            //    traditional: true,
+            //    success: function (data) {
+
+            //        //$('.SupplierId').empty();
+            //        $('.ItemId').append('<option value=""></option>');
+            //        $.each(data, function (index, item) {
+            //            $('.ItemId').append($('<option></option>').val(item.Id).text(item.Name));
+            //        })
+            //        //BindProductCategory();
+            //    }
+            //});
+
+
+            $.ajax({
+                type: "post",
+                url: "/ProductCategories/GetLocation",
+                //data: { Id: selectedDeptValue },
+                datatype: "json",
+                traditional: true,
+                success: function (data) {
+
+                    //$('.SupplierId').empty();
+                    $('.LocationId').append('<option value=""></option>');
+                    $.each(data, function (index, item) {
+                        $('.LocationId').append($('<option></option>').val(item.Id).text(item.Name));
+                    })
+                    //BindProductCategory();
+                }
+            });
+
+        }
+
+        function RemoveOrderRow(e) {
+
+            //alert($('#FactoryCashAdjustment tr').length);
+            //debugger;
+            if ($('#VendorRetailerDetails tr').length == 3) {
+                alert('You cannot delete this row.\nOrder requires atleast one record.');
+                return;
+            }
+
+            if (confirm('Do you really want to delete?') == false) {
+                return;
+            }
+
+            var currRowIndex = $(e).closest('tr').index() + 1;
+
+            var Oid = $('#VendorRetailerDetails tr').eq(currRowIndex).find("input.TempOrderId").val();
+
+            var id = $('#VendorRetailerDetails tr').eq(currRowIndex).find("input.UserDetVendorId").val();
+
+            if (id > 0) {
+                deletedItems.push(id);
+
+                $(e).parent().parent().remove();
+
+            }
+            else {
+                $(e).parent().parent().remove();
+
+            }
+            //$(e).parent().parent().remove();
+            console.log('deleted array', deletedItems)
+        }
+
+        $('#saveState').click(function () {
+            alert('Save')
+            if (CheckOrderGridData() == false) {
+
+            }
+            else {
+                SaveOrderData();
+            }
+            // SaveOrderData();
+        });
+
+        function CheckOrderGridData() {
+            // ProdCatId ProdTypeId styleNo unitPrice itemQnty factoryId
+
+            var totRow = $('#VendorRetailerDetails tr').length;
+            //alert(totRow);
+            for (var i = 1; i <= totRow; i++) {
+                if ($('#VendorRetailerDetails tr').eq(i).find(".ProductCatId").val() == "") {
+                    alert('Product Category required');
+                    return false;
+                };
+
+                if ($('#VendorRetailerDetails tr').eq(i).find(".ItemId").val() == "") {
+                    alert('Item required');
+                    return false;
+                };
+
+                if ($('#VendorRetailerDetails tr').eq(i).find(".UnitPrice").val() == "") {
+                    alert('Unit price required');
+                    return false;
+                };
+
+                if ($('#VendorRetailerDetails tr').eq(i).find(".LocationId").val() == "") {
+                    alert('Location required');
+                    return false;
+                };
+
+                if ($('#VendorRetailerDetails tr').eq(i).find(".CarryingCost").val() == "") {
+                    alert('Carrying cost required');
+                    return false;
+                };
+
+            }
+
+            return true;
+        }
+
+
+        function SaveOrderData() {
+            $("#saveState").attr("disabled", "disabled");
+
+            var Id = $('#Id').val();
+
+            var Email = $('#Email').val();
+
+            //var AgreementsId = $('#AgreementsId').val();
+
+            var EmployeeId = $('#EmployeeId').val();
+
+            var Phone = $('#Phone').val();
+
+            var Name = $('#Name').val();
+            var ContactPerson = $('#ContactPerson').val();
+
+            var TempOrderId = document.getElementsByName("TempOrderId");
+            var ProductCatId = document.getElementsByName("ProductCatId");
+            var ItemId = document.getElementsByName("ItemId");
+            var UnitPrice = document.getElementsByName("UnitPrice");
+            //var LocationName = document.getElementsByName("LocationName");
+            var CarryingCost = document.getElementsByName("CarryingCost");
+            var LocationId = document.getElementsByName("LocationId");
+
+            console.log("LocationId", LocationId);
+
+            var UserDetVendorId = document.getElementsByName("UserDetVendorId");
+            //var UserDetVendorId = $('.UserDetVendorId');
+            //console.log("zzzzzzzzzz", UserDetVendorId);
+
+            var VendorRetailerId = document.getElementsByName("VendorRetailerId");
+
+            // VendorRetailerId
+            //return;
+            var OItems = [];
+
+
+
+            for (var i = 0; i < ProductCatId.length; i++) {
+                //console.log("zzzzzzzzzzzzzzzzzzqqq", UserDetVendorId[i]);
+                //console.log("zzzzzzzzzzzzzzzzzzccc", LocationId[i]);
+                if (ProductCatId[i].value == "") { continue; }
+                OItems.push({
+                    TempOrderDetId: TempOrderId[i].value,
+                    Id: UserDetVendorId[i].value,
+                    ProductCategoryId: ProductCatId[i].value,
+                    ItemId: ItemId[i].value,
+                    UnitPrice: UnitPrice[i].value,
+                    LocationId: LocationId[i].value,
+                    //Location: LocationName[i].value,
+                    CarryingCost: CarryingCost[i].value,
+                    VendorRetailerId: VendorRetailerId[i].value
+                });
+                console.log(OItems[i]);
+            }
+
+            OrderDetails = JSON.stringify({
+                OrderDetails: OItems,
+                //AgreementsId: AgreementsId,
+                Id: Id,
+                Name: Name,
+                Phone: Phone,
+                Email: Email,
+                UserType: 1,
+                ContactPerson: ContactPerson,
+                EmployeeId: EmployeeId,
+                DelItems: deletedItems
+            });
+
+            $.ajax({
+                contentType: 'application/json; charset=utf-8',
+                dataType: 'json',
+                type: 'POST',
+                url: '/VendorRetailer/UpdateVendorRetailerOrder',
+                data: OrderDetails,
+                success: function (result) {
+                    console.log(result);
+                    $("#saveState").removeAttr("disabled");
+                    if (result.flag == true) {
+                        //alert("Record save successfully!");
+                        window.location = "/Retailer/Edit/" + Id;
+                    }
+                    else {
+                        alert(result.message);
+                    }
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    alert('Error: ' + textStatus + ' - ' + errorThrown);
+                    $("#saveState").removeAttr("disabled");
+                }
+            });
+        }
+    </script>
+
+
+}
