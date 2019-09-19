@@ -109,7 +109,11 @@
         <br />
         <div class="form-group">
             <div class="col-md-10">
-                <input type="submit" value="Update" class="btn btn-primary" />
+                @if (User.IsInRole("Admin"))
+                {
+                    <input type="submit" value="Update" class="btn btn-primary" />
+
+                }
                 <button type="button" class="btn btn-danger" onclick="window.location.href='@Url.Action("Index")';">Cancel</button>
             </div>
         </div>

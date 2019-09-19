@@ -9,7 +9,10 @@
                     <li class="@(ViewContext.RouteData.Values["Controller"].ToString()=="Companies" ? "active" : "")">
                         <a href="#">Company</a>
                         <ul>
+                            @if (User.IsInRole("Admin"))
+                            {
                             <li>@Html.ActionLink("Create New", "Create", "Companies")</li>
+                            }
                             <li>@Html.ActionLink("Companies", "Index", "Companies")</li>
                         </ul>
                     </li>
@@ -56,7 +59,7 @@
                     <li class="navigation-divider"></li>
 
                     <li class="@(ViewContext.RouteData.Values["Controller"].ToString()=="Payments" ? "active" : "")">
-                        <a href="#">Payments</a>
+                        <a href="#">Transactions</a>
                         <ul>
                             <li>@Html.ActionLink("Create New", "Create", "Payments")</li>
                             <li>@Html.ActionLink("Payments", "Index", "Payments")</li>
@@ -67,7 +70,7 @@
                     <li class="navigation-divider"></li>
 
                     <li class="@(ViewContext.RouteData.Values["Controller"].ToString()=="TransportOrders" ? "active" : "")">
-                        <a href="#">Transport Orders</a>
+                        <a href="#">Transport</a>
                         <ul>
                             <li>@Html.ActionLink("Create New", "Create", "TransportOrders")</li>
                             <li>@Html.ActionLink("Transport Orders", "Index", "TransportOrders")</li>
@@ -89,7 +92,7 @@
                     <li class="navigation-divider"></li>
 
                     <li class="@(ViewContext.RouteData.Values["Controller"].ToString()=="BankTransfer" ? "active" : "")">
-                        <a href="#">Bank Transfer</a>
+                        <a href="#">Bank To Bank</a>
                         <ul>
                             <li>@Html.ActionLink("Create New", "Create", "BankTransfer")</li>
                             <li>@Html.ActionLink("Transfer List", "Index", "BankTransfer")</li>
@@ -98,19 +101,34 @@
 
                     <li class="navigation-divider"></li>
 
-                    <li class="@(ViewContext.RouteData.Values["Controller"].ToString()=="Commission" ? "active" : "")">
-                        <a href="#">Commission</a>
-                        <ul>
-                            <li>@Html.ActionLink("Create New", "Create", "Commission")</li>
-                            <li>@Html.ActionLink("Commision List", "Index", "Commission")</li>
-                        </ul>
-                    </li>
 
-                    <li class="@(ViewContext.RouteData.Values["Controller"].ToString()=="RetailerCommission" ? "active" : "")">
-                        <a href="#">Retailer Commission</a>
+                    @if (User.IsInRole("Admin"))
+                    {
+
+                        <li class="@(ViewContext.RouteData.Values["Controller"].ToString()=="Commission" ? "active" : "")">
+                            <a href="#">Vendor Commission</a>
+                            <ul>
+                                <li>@Html.ActionLink("Create New", "Create", "Commission")</li>
+                                <li>@Html.ActionLink("Commision List", "Index", "Commission")</li>
+                            </ul>
+                        </li>
+
+                        <li class="@(ViewContext.RouteData.Values["Controller"].ToString()=="RetailerCommission" ? "active" : "")">
+                            <a href="#">Retailer Commission</a>
+                            <ul>
+                                <li>@Html.ActionLink("Create New", "Create", "RetailerCommission")</li>
+                                <li>@Html.ActionLink("Commision List", "Index", "RetailerCommission")</li>
+                            </ul>
+                        </li>
+
+
+                    }
+
+                    <li class="@(ViewContext.RouteData.Values["Controller"].ToString()=="Expenses" ? "active" : "")">
+                        <a href="#">Expenses</a>
                         <ul>
-                            <li>@Html.ActionLink("Create New", "Create", "RetailerCommission")</li>
-                            <li>@Html.ActionLink("Commision List", "Index", "RetailerCommission")</li>
+                            <li>@Html.ActionLink("Create New", "Create", "Expenses")</li>
+                            <li>@Html.ActionLink("Expense List", "Index", "Expenses")</li>
                         </ul>
                     </li>
                 </ul>
@@ -138,7 +156,10 @@
                     <li class="@(ViewContext.RouteData.Values["Controller"].ToString()=="CompanyBanks" ? "active" : "")">
                         <a href="#">Company Bank</a>
                         <ul>
-                            <li>@Html.ActionLink("Create New", "Create", "CompanyBanks")</li>
+                            @if (User.IsInRole("Admin"))
+                            {
+                                <li>@Html.ActionLink("Create New", "Create", "CompanyBanks")</li>
+                            }
                             <li>@Html.ActionLink("Company Bank List", "Index", "CompanyBanks")</li>
                         </ul>
                     </li>
@@ -201,13 +222,7 @@
                     </li>
 
 
-                    <li class="@(ViewContext.RouteData.Values["Controller"].ToString()=="Expenses" ? "active" : "")">
-                        <a href="#">Expenses</a>
-                        <ul>
-                            <li>@Html.ActionLink("Create New", "Create", "Expenses")</li>
-                            <li>@Html.ActionLink("Expense List", "Index", "Expenses")</li>
-                        </ul>
-                    </li>
+
 
                     <li class="@(ViewContext.RouteData.Values["Controller"].ToString()=="ExpenseItems" ? "active" : "")">
                         <a href="#">Expense Items</a>
@@ -226,14 +241,14 @@
                     <li class="@(ViewContext.RouteData.Values["Controller"].ToString()=="Report" && ViewContext.RouteData.Values["Action"].ToString()== "RetailerLedgerReport" ? "active" : "")">@Html.ActionLink("Retailer Ledger", "RetailerLedgerReport", "Report")</li>
                     <li class="@(ViewContext.RouteData.Values["Controller"].ToString()=="Report" && ViewContext.RouteData.Values["Action"].ToString()== "PurchaseOrderReport" ? "active" : "")">@Html.ActionLink("Purchase Order", "PurchaseOrderReport", "Report")</li>
                     <li class="@(ViewContext.RouteData.Values["Controller"].ToString()=="Report" && ViewContext.RouteData.Values["Action"].ToString()== "SalesOrderReport" ? "active" : "")">@Html.ActionLink("Sales Order", "SalesOrderReport", "Report")</li>
-                    <li class="@(ViewContext.RouteData.Values["Controller"].ToString()=="Report" && ViewContext.RouteData.Values["Action"].ToString()== "BankToBank" ? "active" : "")">@Html.ActionLink("Bank To Bank", "BankTransferReport", "Report")</li>
+                    <li class="@(ViewContext.RouteData.Values["Controller"].ToString()=="Report" && ViewContext.RouteData.Values["Action"].ToString()== "BankToBank" ? "active" : "")">@Html.ActionLink("Bank Statement", "BankTransferReport", "Report")</li>
                 </ul>
             </li>
             @*@ViewBag.PendingCount*@
             <li>
-                <a href="#"><i class="icon-file-pdf"></i>Pending Checks<span class="label bg-warning-400">3</span></a>
+                <a href="#"><i class="icon-file-pdf"></i>Pending Cheque<span class="label bg-warning-400">3</span></a>
                 <ul>
-                    <li class="@(ViewContext.RouteData.Values["Controller"].ToString()=="pendingList" && ViewContext.RouteData.Values["Action"].ToString()== "pendingList" ? "active" : "")">@Html.ActionLink("Pending Checks", "PendingLists", "Payments")</li>
+                    <li class="@(ViewContext.RouteData.Values["Controller"].ToString()=="pendingList" && ViewContext.RouteData.Values["Action"].ToString()== "pendingList" ? "active" : "")">@Html.ActionLink("Pending Cheque", "PendingLists", "Payments")</li>
                 </ul>
             </li>
 
@@ -251,5 +266,3 @@
         </ul>
     </div>
 </div>
-
-

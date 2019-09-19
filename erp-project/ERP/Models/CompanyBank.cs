@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Web;
+using System.Web.Mvc;
 
 namespace ERP.Models
 {
@@ -23,6 +24,7 @@ namespace ERP.Models
         [RegularExpression("^[a-zA-Z0-9]*$", ErrorMessage = "Only Alphabets and Numbers allowed.")]
         [Display(Name = "Account No")]
         [StringLength(500)]
+        [Index(IsUnique = true)]
         public string AccountNo { get; set; }
         [StringLength(200)]
         public string Branch { get; set; }

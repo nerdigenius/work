@@ -20,6 +20,7 @@ namespace ERP.Models
         public string Address { get; set; }
         public int Phone { get; set; }
         public string Email { get; set; }
+       
         public int Salary { get; set; }
 
         public virtual Company Company { get; set; }

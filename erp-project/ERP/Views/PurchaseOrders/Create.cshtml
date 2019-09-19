@@ -13,6 +13,12 @@
     .pad-between {
         box-sizing: border-box;
         padding: 0 15px;
+        min-width: 170px;
+    }
+
+    .scroll {
+        overflow-x: scroll;
+        white-space: nowrap;
     }
 </style>
 
@@ -45,13 +51,13 @@
                     <div class="form-group">
                         @Html.LabelFor(model => model.AgreementsId, "Agreement", htmlAttributes: new { @class = "control-label col-md-2" })
                         <div class="col-md-10">
-                            @Html.DropDownList("AgreementsId", null, "",htmlAttributes: new { @class = "form-control select2" })
+                            @Html.DropDownList("AgreementsId", null, "", htmlAttributes: new { @class = "form-control select2" })
                             @Html.ValidationMessageFor(model => model.AgreementsId, "", new { @class = "text-danger" })
                         </div>
                     </div>
 
                     <div class="form-group">
-                        @Html.LabelFor(model => model.LocationId, "Location", htmlAttributes: new { @class = "control-label col-md-2" })
+                        @Html.LabelFor(model => model.LocationId, "Address", htmlAttributes: new { @class = "control-label col-md-2" })
                         <div class="col-md-10">
                             @Html.DropDownList("LocationId", null, htmlAttributes: new { @class = "form-control select2" })
                             @Html.ValidationMessageFor(model => model.LocationId, "", new { @class = "text-danger" })
@@ -72,7 +78,7 @@
                     <div class="form-group">
                         @Html.LabelFor(model => model.OrderDate, htmlAttributes: new { @class = "control-label col-md-2" })
                         <div class="col-md-10">
-                            @Html.EditorFor(model => model.OrderDate, new { htmlAttributes = new { @class = "form-control datepicker"} })
+                            @Html.EditorFor(model => model.OrderDate, new { htmlAttributes = new { @class = "form-control datepicker" } })
                             @Html.ValidationMessageFor(model => model.OrderDate, "", new { @class = "text-danger" })
                         </div>
                     </div>
@@ -89,100 +95,143 @@
         </div>
         <br />
         <div>
-            <div class="col-md-12 card blue-top">
+            <div class="col-md-12 card blue-top table-responsive scrolling">
+                <table class="table table-bordered table-xxs">
+                    <tbody>
+                        <tr>
+                            <td>
+                                <div class="pad-between col-md-2 text-center">
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.Item.ProductCategory.Name, "Product Category", htmlAttributes: new { @class = "control-label" })
+                                        @Html.DropDownList("ProductCategoryId", null, htmlAttributes: new { @class = "form-control select2" })
+                                        @Html.ValidationMessageFor(model => model.Item.ProductCategoryId, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="pad-between col-md-2 text-center">
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.ItemId, "Item", htmlAttributes: new { @class = "control-label" })
+                                        @Html.DropDownList("ItemId", null, htmlAttributes: new { @class = "form-control select2" })
+                                        @Html.ValidationMessageFor(model => model.ItemId, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="pad-between col-md-1 text-center">
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.OrderQuantity, "Order Quantity", htmlAttributes: new { @class = "control-label" })
+                                        @Html.EditorFor(model => model.OrderQuantity, new { htmlAttributes = new { @class = "form-control" } })
+                                        @Html.ValidationMessageFor(model => model.OrderQuantity, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="pad-between col-md-1 text-center">
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.UnitId, "Unit", htmlAttributes: new { @class = "control-label" })
+                                        @Html.DropDownList("UnitId", null, "", htmlAttributes: new { @class = "form-control select2" })
+                                        @Html.ValidationMessageFor(model => model.UnitId, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="pad-between col-md-1 text-center">
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.UnitPrice, "Unit Price", htmlAttributes: new { @class = "control-label" })
+                                        @Html.EditorFor(model => model.UnitPrice, new { htmlAttributes = new { @class = "form-control" } })
+                                        @Html.ValidationMessageFor(model => model.UnitPrice, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="pad-between col-md-1 text-center">
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.TransportId, "Transport", htmlAttributes: new { @class = "control-label" })
+                                        @Html.DropDownList("TransportId", null, "", htmlAttributes: new { @class = "form-control select2" })
+                                        @Html.ValidationMessageFor(model => model.TransportId, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="pad-between col-md-1 text-center">
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.CarryCost, "Carrying Cost", htmlAttributes: new { @class = "control-label" })
+                                        @Html.EditorFor(model => model.CarryCost, new { htmlAttributes = new { @class = "form-control" } })
+                                        @Html.ValidationMessageFor(model => model.CarryCost, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="pad-between col-md-1 text-center">
+                                    <div class="form-group">
+                                        @Html.LabelFor(model => model.Tax, "Tax", htmlAttributes: new { @class = "control-label" })
+                                        @Html.EditorFor(model => model.Tax, new { htmlAttributes = new { @class = "form-control" } })
+                                        @Html.ValidationMessageFor(model => model.Tax, "", new { @class = "text-danger" })
+                                    </div>
 
-                <div class="pad-between col-md-2 text-center">
-                    <div class="form-group">
-                        @Html.LabelFor(model => model.Item.ProductCategory.Name, "Product Category", htmlAttributes: new { @class = "control-label" })
-                        @Html.DropDownList("ProductCategoryId", null, htmlAttributes: new { @class = "form-control select2" })
-                        @Html.ValidationMessageFor(model => model.Item.ProductCategoryId, "", new { @class = "text-danger" })
-                    </div>
-                </div>
 
-                <div class="pad-between col-md-2 text-center">
-                    <div class="form-group">
-                        @Html.LabelFor(model => model.ItemId, "Item", htmlAttributes: new { @class = "control-label" })
-                        @Html.DropDownList("ItemId", null, htmlAttributes: new { @class = "form-control select2" })
-                        @Html.ValidationMessageFor(model => model.ItemId, "", new { @class = "text-danger" })
-                    </div>
-                </div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="pad-between col-md-1 text-center">
+                                    <div class="form-group">
+                                        <label>Product Subtotal</label>
+                                        <input type="text" id="productSubtotal" class="form-control" disabled="disabled" />
 
-                <div class="pad-between col-md-1 text-center">
-                    <div class="form-group">
-                        @Html.LabelFor(model => model.OrderQuantity, "Order Quantity", htmlAttributes: new { @class = "control-label" })
-                        @Html.EditorFor(model => model.OrderQuantity, new { htmlAttributes = new { @class = "form-control" } })
-                        @Html.ValidationMessageFor(model => model.OrderQuantity, "", new { @class = "text-danger" })
-                    </div>
-                </div>
-                <div class="pad-between col-md-1 text-center">
-                    <div class="form-group">
-                        @Html.LabelFor(model => model.UnitId, "Unit", htmlAttributes: new { @class = "control-label" })
-                        @Html.DropDownList("UnitId", null,"", htmlAttributes: new { @class = "form-control select2" })
-                        @Html.ValidationMessageFor(model => model.UnitId, "", new { @class = "text-danger" })
-                    </div>
-                </div>
-                <div class="pad-between col-md-1 text-center">
-                    <div class="form-group">
-                        @Html.LabelFor(model => model.UnitPrice, "Unit Price", htmlAttributes: new { @class = "control-label" })
-                        @Html.EditorFor(model => model.UnitPrice, new { htmlAttributes = new { @class = "form-control" } })
-                        @Html.ValidationMessageFor(model => model.UnitPrice, "", new { @class = "text-danger" })
-                    </div>
-                </div>
-                <div class="pad-between col-md-1 text-center">
-                    <div class="form-group">
-                        @Html.LabelFor(model => model.TransportId, "Transport", htmlAttributes: new { @class = "control-label" })
-                        @Html.DropDownList("TransportId", null, "",htmlAttributes: new { @class = "form-control select2" })
-                        @Html.ValidationMessageFor(model => model.TransportId, "", new { @class = "text-danger" })
-                    </div>
-                </div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="pad-between col-md-1 text-center">
+                                    <div class="form-group">
+                                        <label>Total Carrying Cost</label>
+                                        <input type="text" id="totalCarryingCost" class="form-control" disabled="disabled" />
 
-                <div class="pad-between col-md-1 text-center">
-                    <div class="form-group">
-                        @Html.LabelFor(model => model.CarryCost, "Carrying Cost", htmlAttributes: new { @class = "control-label" })
-                        @Html.EditorFor(model => model.CarryCost, new { htmlAttributes = new { @class = "form-control" } })
-                        @Html.ValidationMessageFor(model => model.CarryCost, "", new { @class = "text-danger" })
-                    </div>
-                </div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="pad-between col-md-1 text-center">
+                                    <div class="form-group">
+                                        <label>Total Tax</label>
+                                        <input type="text" id="taxTotal" class="form-control" disabled="disabled" />
 
-                <div class="pad-between col-md-1 text-center">
-                    <div class="form-group">
-                        @Html.LabelFor(model => model.Tax, "Tax", htmlAttributes: new { @class = "control-label" })
-                        @Html.EditorFor(model => model.Tax, new { htmlAttributes = new { @class = "form-control" } })
-                        @Html.ValidationMessageFor(model => model.Tax, "", new { @class = "text-danger" })
-                    </div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="pad-between col-md-1 text-center">
+                                    <div class="form-group">
+                                        <label>Grand Total</label>
+                                        <input type="text" id="grandTotal" class="form-control" disabled="disabled" />
 
-                    <div class="form-group">
-                        <label>Total Tax</label>
-                    </div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
 
-                    <div class="form-group">
-                        <label>Grand Total</label>
-                    </div>
-                </div>
 
-                <div class="pad-between col-md-1 text-center">
-                    <div class="form-group">
-                        <label>Product Subtotal</label>
-                        <input type="text" id="productSubtotal" class="form-control" disabled="disabled" />
 
-                    </div>
 
-                    <div class="form-group">
-                        <label id="taxTotal"></label>
-                    </div>
-                
-                    <div class="form-group">
-                        <label id="grandTotal"></label>
-                    </div>
-                </div>
 
-                <div class="pad-between col-md-1 text-center">
-                    <div class="form-group">
-                        <label>Total Carrying Cost</label>
-                        <input type="text" id="totalCarryingCost" class="form-control" disabled="disabled" />
 
-                    </div>
-                </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
             </div>
         </div>
 
@@ -220,7 +269,7 @@
     });
 
     //$('#UserMasId').on('change', function () {
-        
+
     //    $.ajax({
     //        type: "get",
     //        url: "/PurchaseOrders/getRelatedData?id=" + this.value,
@@ -306,10 +355,10 @@
         }
         else {
             //$('#ModalPOQuantity_Error').hide();
-            $('#taxTotal').text(taxTotalPrice);
+            $('#taxTotal').val(taxTotalPrice);
 
             var grandTotal = taxTotalPrice + globaTotal;
-            $("#grandTotal").text(grandTotal);
+            $("#grandTotal").val(grandTotal);
 
         }
 
@@ -381,7 +430,7 @@
 
 
     $('#UserMasId').change(function () {
-      
+
         var id = $('#UserMasId option:selected').val();
 
         $.ajax({
@@ -409,7 +458,7 @@
 
 
 
-               
+
                 var categories = "<select id='categories'>";
                 //categories = categories + '<option value="">--Select--</option>';
                 for (var i = 0; i < data.catList.length; i++) {

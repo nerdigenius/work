@@ -6,8 +6,8 @@
 }
 
 <div class="card green-top">
-    <h2>Create</h2>
-    <h5>Commission</h5>
+    <h2>Entry</h2>
+    <h5>Commission Receiveable</h5>
 </div>
 
 <style>
@@ -97,7 +97,7 @@
 
                 <div class="pad-between col-md-1 text-center">
                     <div class="form-group">
-                        @Html.LabelFor(model => model.CommissionPerUnit, "Commission", htmlAttributes: new { @class = "control-label" })
+                        @Html.LabelFor(model => model.CommissionPerUnit, "Commission Per Unit", htmlAttributes: new { @class = "control-label" })
                         @Html.EditorFor(model => model.CommissionPerUnit, new { htmlAttributes = new { @class = "form-control" } })
                         @Html.ValidationMessageFor(model => model.CommissionPerUnit, "", new { @class = "text-danger" })
                     </div>
@@ -105,7 +105,7 @@
 
                 <div class="pad-between col-md-1 text-center">
                     <div class="form-group">
-                        <label>Total Carrying Cost</label>
+                        <label>Total Commission</label>
                         <input type="text" id="totalCarryingCost" class="form-control" disabled="disabled" />
 
                     </div>
